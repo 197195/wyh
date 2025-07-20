@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字猜猜乐</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .game-area {
+            padding: 30px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-box {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff416c;
+        }
+        
+        .input-group {
+            display: flex;
+            margin-bottom: 25px;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px 0 0 10px;
+            font-size: 1.2rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #ff416c;
+        }
+        
+        .input-group button {
+            padding: 0 25px;
+            background: #ff416c;
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .input-group button:hover {
+            background: #ff4b2b;
+        }
+        
+        .input-group button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .message {
+            background: #e9f7fe;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #31708f;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .message.error {
+            background: #fdecea;
+            color: #d9534f;
+        }
+        
+        .message.success {
+            background: #eaf9e7;
+            color: #5cb85c;
+        }
+        
+        .guesses {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .guesses h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #495057;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 10px;
+        }
+        
+        .guess-list {
+            list-style: none;
+        }
+        
+        .guess-list li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            animation: slideIn 0.3s;
+        }
+        
+        .guess-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .guess-value {
+            font-weight: bold;
+        }
+        
+        .guess-result {
+            font-style: italic;
+        }
+        
+        .guess-result.high {
+            color: #ff416c;
+        }
+        
+        .guess-result.low {
+            color: #4e89e5;
+        }
+        
+        .guess-result.correct {
+            color: #5cb85c;
+            font-weight: bold;
+        }
+        
+        .restart-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.6);
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .game-area {
+                padding: 20px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .input-group button {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-dice"></i> 数字猜猜乐</h1>
+            <p>猜一个1到100之间的数字，你只有8次机会！</p>
+        </div>
+        
+        <div class="game-area">
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-label">剩余次数</div>
+                    <div class="stat-value" id="remaining-guesses">8</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">已猜次数</div>
+                    <div class="stat-value" id="total-guesses">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">游戏状态</div>
+                    <div class="stat-value" id="game-status">进行中</div>
+                </div>
+            </div>
+            
+            <div class="message" id="message"></div>
+            
+            <div class="input-group">
+                <input type="number" id="guess-input" placeholder="输入你的猜测..." min="1" max="100">
+                <button id="guess-btn">猜!</button>
+            </div>
+            
+            <div class="guesses">
+                <h3><i class="fas fa-history"></i> 猜测历史</h3>
+                <ul class="guess-list" id="guess-list"></ul>
+            </div>
+            
+            <button class="restart-btn" id="restart-btn">
+                <i class="fas fa-redo"></i> 重新开始游戏
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 游戏变量
+            let secretNumber;
+            let remainingGuesses;
+            let totalGuesses = 0;
+            let gameOver = false;
+            
+            // DOM元素
+            const guessInput = document.getElementById('guess-input');
+            const guessBtn = document.getElementById('guess-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            const messageEl = document.getElementById('message');
+            const remainingGuessesEl = document.getElementById('remaining-guesses');
+            const totalGuessesEl = document.getElementById('total-guesses');
+            const gameStatusEl = document.getElementById('game-status');
+            const guessList = document.getElementById('guess-list');
+            
+            // 初始化游戏
+            function initGame() {
+                secretNumber = Math.floor(Math.random() * 100) + 1;
+                remainingGuesses = 8;
+                totalGuesses = 0;
+                gameOver = false;
+                
+                // 重置UI
+                guessInput.value = '';
+                guessInput.disabled = false;
+                guessBtn.disabled = false;
+                messageEl.style.display = 'none';
+                remainingGuessesEl.textContent = remainingGuesses;
+                totalGuessesEl.textContent = totalGuesses;
+                gameStatusEl.textContent = '进行中';
+                gameStatusEl.style.color = '#ff416c';
+                guessList.innerHTML = '';
+                
+                // 添加动画
+                document.querySelector('.container').classList.add('pulse');
+            }
+            
+            // 处理猜测
+            function handleGuess() {
+                if (gameOver) return;
+                
+                const guess = parseInt(guessInput.value);
+                
+                // 验证输入
+                if (isNaN(guess) || guess < 1 || guess > 100) {
+                    showMessage('请输入1到100之间的有效数字！', 'error');
+                    guessInput.value = '';
+                    guessInput.focus();
+                    return;
+                }
+                
+                totalGuesses++;
+                remainingGuesses--;
+                
+                // 更新UI
+                remainingGuessesEl.textContent = remainingGuesses;
+                totalGuessesEl.textContent = totalGuesses;
+                
+                // 添加到历史记录
+                addToGuessHistory(guess);
+                
+                // 检查猜测结果
+                if (guess === secretNumber) {
+                    // 猜对了
+                    gameOver = true;
+                    showMessage(`恭喜！你猜对了！数字是 ${secretNumber}。`, 'success');
+                    gameStatusEl.textContent = '胜利';
+                    gameStatusEl.style.color = '#5cb85c';
+                    endGame();
+                } else if (remainingGuesses <= 0) {
+                    // 没有机会了
+                    gameOver = true;
+                    showMessage(`游戏结束！正确答案是 ${secretNumber}。下次加油！`, 'error');
+                    gameStatusEl.textContent = '失败';
+                    endGame();
+                } else {
+                    // 提示太高或太低
+                    if (guess > secretNumber) {
+                        showMessage(`太高了！再试一次。`, 'error');
+                    } else {
+                        showMessage(`太低了！再试一次。`, 'error');
+                    }
+                }
+                
+                // 清空输入框
+                guessInput.value = '';
+                guessInput.focus();
+            }
+            
+            // 显示消息
+            function showMessage(msg, type) {
+                messageEl.textContent = msg;
+                messageEl.className = 'message';
+                messageEl.classList.add(type);
+                messageEl.style.display = 'block';
+            }
+            
+            // 添加到猜测历史
+            function addToGuessHistory(guess) {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="guess-value">${guess}</span>
+                    <span class="guess-result ${guess === secretNumber ? 'correct' : guess > secretNumber ? 'high' : 'low'}">
+                        ${guess === secretNumber ? '正确!' : guess > secretNumber ? '太高' : '太低'}
+                    </span>
+                `;
+                guessList.prepend(li);
+            }
+            
+            // 结束游戏
+            function endGame() {
+                guessInput.disabled = true;
+                guessBtn.disabled = true;
+                document.querySelector('.container').classList.remove('pulse');
+            }
+            
+            // 事件监听
+            guessBtn.addEventListener('click', handleGuess);
+            
+            restartBtn.addEventListener('click', initGame);
+            
+            guessInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    handleGuess();
+                }
+            });
+            
+            // 开始游戏
+            initGame();
+        });
+    </script>
+</body>
+</html>
