@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>气球点击游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+        #game-container {
+            width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            position: relative;
+            background-color: #e6f7ff;
+            border: 2px solid #3399ff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: rgba(0,0,0,0.5);
+            user-select: none;
+        }
+        #score {
+            font-size: 24px;
+            margin: 20px;
+            color: #0066cc;
+        }
+        #timer {
+            font-size: 24px;
+            margin: 20px;
+            color: #ff6600;
+        }
+        #start-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        #start-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>气球点击游戏</h1>
+    <p>在30秒内点击尽可能多的气球！</p>
+    
+    <div id="score">得分: 0</div>
+    <div id="timer">时间: 30</div>
+    <button id="start-btn">开始游戏</button>
+    
+    <div id="game-container"></div>
+
+    <script>
+        const gameContainer = document.getElementById('game-container');
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+        const startBtn = document.getElementById('start-btn');
+        
+        let score = 0;
+        let timeLeft = 30;
+        let gameInterval;
+        let timerInterval;
+        let isGameRunning = false;
+        
+        // 气球颜色数组
+        const colors = [
+            '#ff9999', '#99ff99', '#9999ff', 
+            '#ffff99', '#ff99ff', '#99ffff',
+            '#ffcc99', '#ccff99', '#99ccff'
+        ];
+        
+        // 创建随机气球
+        function createBalloon() {
+            if (!isGameRunning) return;
+            
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            
+            // 随机位置
+            const x = Math.random() * (gameContainer.offsetWidth - 60);
+            const y = Math.random() * (gameContainer.offsetHeight - 80);
+            
+            // 随机颜色
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // 设置气球样式
+            balloon.style.left = x + 'px';
+            balloon.style.top = y + 'px';
+            balloon.style.backgroundColor = color;
+            
+            // 气球动画效果
+            balloon.style.transform = 'scale(0)';
+            setTimeout(() => {
+                balloon.style.transition = 'transform 0.3s';
+                balloon.style.transform = 'scale(1)';
+            }, 10);
+            
+            // 点击事件
+            balloon.addEventListener('click', () => {
+                if (!isGameRunning) return;
+                
+                score++;
+                scoreDisplay.textContent = `得分: ${score}`;
+                
+                // 点击效果
+                balloon.style.transition = 'transform 0.2s';
+                balloon.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    balloon.style.transform = 'scale(0)';
+                    setTimeout(() => {
+                        gameContainer.removeChild(balloon);
+                    }, 200);
+                }, 200);
+            });
+            
+            // 自动消失
+            setTimeout(() => {
+                if (balloon.parentNode === gameContainer) {
+                    balloon.style.transition = 'transform 0.5s';
+                    balloon.style.transform = 'scale(0)';
+                    setTimeout(() => {
+                        if (balloon.parentNode === gameContainer) {
+                            gameContainer.removeChild(balloon);
+                        }
+                    }, 500);
+                }
+            }, 3000);
+            
+            gameContainer.appendChild(balloon);
+        }
+        
+        // 开始游戏
+        function startGame() {
+            if (isGameRunning) return;
+            
+            isGameRunning = true;
+            score = 0;
+            timeLeft = 30;
+            scoreDisplay.textContent = `得分: ${score}`;
+            timerDisplay.textContent = `时间: ${timeLeft}`;
+            
+            // 清除所有现有气球
+            while (gameContainer.firstChild) {
+                gameContainer.removeChild(gameContainer.firstChild);
+            }
+            
+            // 创建气球
+            gameInterval = setInterval(createBalloon, 800);
+            
+            // 计时器
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `时间: ${timeLeft}`;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+            
+            startBtn.disabled = true;
+        }
+        
+        // 结束游戏
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(gameInterval);
+            clearInterval(timerInterval);
+            startBtn.disabled = false;
+            
+            alert(`游戏结束！你的得分是: ${score}`);
+        }
+        
+        // 开始按钮事件
+        startBtn.addEventListener('click', startGame);
+    </script>
+</body>
+</html>
