@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>虚化背景音乐页面</title>
+    <title>地藏王本愿经 - 虚化背景页面</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-family: 'Segoe UI', 'Microsoft YaHei', 'SimSun', serif;
         }
         
         body {
             background-color: #121212;
-            color: #f0f0f0;
-            line-height: 1.6;
+            color: #d4af37; /* 基础金色 */
+            line-height: 1.8;
             overflow-x: hidden;
             min-height: 100vh;
             display: flex;
@@ -40,8 +40,8 @@
             background-image: url('https://p1.ssl.qhimgs1.com/sdr/400__/t0198d3cb4cca6eea07.jpg');
             background-size: cover;
             background-position: center;
-            filter: blur(15px) brightness(0.7);
-            transform: scale(1.1);
+            filter: blur(8px) brightness(0.8);
+            transform: scale(1.05);
         }
         
         .overlay {
@@ -50,90 +50,126 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.3);
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 40px 20px;
             position: relative;
             z-index: 1;
             text-align: center;
+            width: 100%;
         }
         
         .logo {
-            font-size: 4rem;
+            font-size: 3rem; /* 调整为中等偏大的标题 */
             margin-bottom: 30px;
             font-weight: 300;
             letter-spacing: 2px;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.7), 0 0 20px rgba(212, 175, 55, 0.5); /* 金色微光效果 */
         }
         
         .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.8;
+            font-size: 1.1rem; /* 中等大小副标题 */
+            opacity: 0.9;
             max-width: 600px;
             margin: 0 auto 40px;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.5); /* 金色微光 */
         }
         
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-        
-        .card {
+        /* 文本内容模块 */
+        .text-content {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 12px;
-            padding: 30px;
+            padding: 40px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            border: 1px solid rgba(212, 175, 55, 0.2); /* 金色边框 */
+            margin-bottom: 60px;
+            text-align: left;
+            line-height: 2;
+            max-height: 70vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(212, 175, 55, 0.3) transparent; /* 金色滚动条 */
         }
         
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        .text-content::-webkit-scrollbar {
+            width: 6px;
         }
         
-        .icon {
-            font-size: 2.5rem;
+        .text-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .text-content::-webkit-scrollbar-thumb {
+            background-color: rgba(212, 175, 55, 0.3);
+            border-radius: 3px;
+        }
+        
+        .text-content h2 {
+            margin-bottom: 30px;
+            color: #d4af37;
+            font-weight: 400;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2); /* 金色下划线 */
+            padding-bottom: 15px;
+            text-align: center;
+            font-size: 1.6rem; /* 中等标题大小 */
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.6); /* 金色微光 */
+        }
+        
+        .text-content h3 {
+            margin: 25px 0 15px;
+            color: #d4af37;
+            font-weight: 400;
+            font-size: 1.3rem; /* 中等子标题大小 */
+            text-shadow: 0 0 6px rgba(212, 175, 55, 0.5); /* 金色微光 */
+        }
+        
+        .text-content p {
             margin-bottom: 20px;
-            opacity: 0.9;
+            opacity: 0.95;
+            text-indent: 2em;
+            font-size: 1.05rem; /* 中等正文字体大小 */
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.3); /* 金色微光效果 */
+        }
+        
+        .text-content .buddha-name {
+            color: #f9e076; /* 更亮的金色 */
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(249, 224, 118, 0.6);
         }
         
         .btn {
             display: inline-block;
             padding: 12px 25px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(212, 175, 55, 0.2);
+            color: #d4af37;
             text-decoration: none;
             border-radius: 30px;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
             font-weight: 500;
-            margin-top: auto;
+            margin-top: 20px;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
         }
         
         .btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(212, 175, 55, 0.3);
             transform: scale(1.05);
         }
         
         footer {
             text-align: center;
             padding: 40px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
             margin-top: 40px;
             font-size: 0.9rem;
-            opacity: 0.7;
+            opacity: 0.8;
             width: 100%;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
         }
         
         /* 访问计数器样式 */
@@ -146,7 +182,7 @@
             border-radius: 12px;
             padding: 15px 20px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             z-index: 1000;
             text-align: center;
         }
@@ -155,24 +191,28 @@
             font-size: 0.9rem;
             opacity: 0.8;
             margin-bottom: 5px;
+            color: #d4af37;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
         }
         
         .counter-number {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #6a89cc;
-            text-shadow: 0 0 10px rgba(106, 137, 204, 0.5);
+            color: #d4af37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
         }
         
         .counter-label {
             font-size: 0.8rem;
             opacity: 0.7;
             margin-top: 5px;
+            color: #d4af37;
         }
         
         .counter-loading {
-            color: #aaa;
+            color: #d4af37;
             font-size: 0.9rem;
+            opacity: 0.7;
         }
         
         /* 音乐播放器样式 */
@@ -186,7 +226,7 @@
             border-radius: 16px;
             padding: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             z-index: 1000;
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
@@ -201,11 +241,14 @@
             font-size: 1.1rem;
             font-weight: 500;
             margin-left: 10px;
+            color: #d4af37;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
         }
         
         .music-icon {
             font-size: 1.5rem;
-            color: #6a89cc;
+            color: #d4af37;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
         }
         
         .player-controls {
@@ -218,29 +261,31 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: #6a89cc;
+            background: rgba(212, 175, 55, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s ease;
             margin-right: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
         }
         
         .play-btn:hover {
-            background: #5a79bc;
+            background: rgba(212, 175, 55, 0.4);
             transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
         
         .play-icon {
             font-size: 1.5rem;
-            color: white;
+            color: #f0e6d2;
         }
         
         .progress-container {
             flex-grow: 1;
             height: 6px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(212, 175, 55, 0.1);
             border-radius: 3px;
             cursor: pointer;
             position: relative;
@@ -248,10 +293,11 @@
         
         .progress-bar {
             height: 100%;
-            background: #6a89cc;
+            background: #d4af37;
             border-radius: 3px;
             width: 0%;
             transition: width 0.1s linear;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.7);
         }
         
         .time-display {
@@ -259,7 +305,8 @@
             justify-content: space-between;
             font-size: 0.8rem;
             margin-top: 5px;
-            opacity: 0.7;
+            opacity: 0.8;
+            color: #d4af37;
         }
         
         .volume-controls {
@@ -272,12 +319,13 @@
             font-size: 1.2rem;
             margin-right: 10px;
             opacity: 0.8;
+            color: #d4af37;
         }
         
         .volume-slider {
             flex-grow: 1;
             height: 5px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(212, 175, 55, 0.1);
             border-radius: 3px;
             cursor: pointer;
             position: relative;
@@ -285,9 +333,10 @@
         
         .volume-level {
             height: 100%;
-            background: #6a89cc;
+            background: #d4af37;
             border-radius: 3px;
-            width: 70%;
+            width: 50%;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.7);
         }
         
         .player-toggle {
@@ -297,7 +346,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: #6a89cc;
+            background: rgba(212, 175, 55, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -305,15 +354,17 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             z-index: 1001;
             transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.5);
         }
         
         .player-toggle:hover {
             transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
         }
         
         .toggle-icon {
             font-size: 1.5rem;
-            color: white;
+            color: #f0e6d2;
         }
         
         .player-hidden {
@@ -323,13 +374,14 @@
         
         .loading-text {
             font-size: 0.8rem;
-            color: #aaa;
+            color: #d4af37;
             text-align: center;
             margin-top: 10px;
+            opacity: 0.8;
         }
         
         .error-message {
-            color: #ff6b6b;
+            color: #ff9966;
             font-size: 0.8rem;
             text-align: center;
             margin-top: 10px;
@@ -337,11 +389,24 @@
         
         @media (max-width: 768px) {
             .logo {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             
-            .content-grid {
-                grid-template-columns: 1fr;
+            .text-content {
+                padding: 25px;
+                max-height: 60vh;
+            }
+            
+            .text-content h2 {
+                font-size: 1.4rem;
+            }
+            
+            .text-content h3 {
+                font-size: 1.2rem;
+            }
+            
+            .text-content p {
+                font-size: 1rem;
             }
             
             .music-player {
@@ -402,13 +467,24 @@
         .pulse {
             animation: pulse 0.5s ease;
         }
+        
+        /* 金色发光动画效果 */
+        @keyframes goldenGlow {
+            0% { text-shadow: 0 0 5px rgba(212, 175, 55, 0.5), 0 0 10px rgba(212, 175, 55, 0.3); }
+            50% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.7), 0 0 20px rgba(212, 175, 55, 0.5); }
+            100% { text-shadow: 0 0 5px rgba(212, 175, 55, 0.5), 0 0 10px rgba(212, 175, 55, 0.3); }
+        }
+        
+        .golden-glow {
+            animation: goldenGlow 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body>
     <!-- 全局访问计数器 -->
     <div class="counter-container fade-in">
         <div class="counter-title">总访问量</div>
-        <div class="counter-number" id="globalVisitCount">
+        <div class="counter-number golden-glow" id="globalVisitCount">
             <span class="counter-loading">加载中...</span>
         </div>
         <div class="counter-label">全球用户统计</div>
@@ -420,28 +496,38 @@
     </div>
     
     <div class="container">
-        <div class="logo fade-in">虚化背景</div>
-        <p class="subtitle fade-in delay-1">简洁美观的虚化背景设计</p>
+        <div class="logo fade-in golden-glow">地藏王本愿经</div>
+        <p class="subtitle fade-in delay-1 golden-glow">佛教经典 · 大乘佛教重要典籍</p>
         
-        <div class="content-grid">
-            <div class="card fade-in delay-1">
-                <div class="icon">✦</div>
-                <a href="#" class="btn">探索</a>
-            </div>
+        <!-- 文本内容模块 - 地藏王本愿经 -->
+        <div class="text-content fade-in delay-2">
+            <h2 class="golden-glow">地藏菩萨本愿经</h2>
             
-            <div class="card fade-in delay-2">
-                <div class="icon">◉</div>
-                <a href="#" class="btn">体验</a>
-            </div>
+            <h3 class="golden-glow">卷上</h3>
+            <h3 class="golden-glow">忉利天宫神通品第一</h3>
+            <p>如是我闻。一时佛在忉利天，为母说法。</p>
+            <p>尔时十方无量世界，不可说不可说一切诸佛，及大菩萨摩诃萨，皆来集会。赞叹释迦牟尼佛，能于五浊恶世，现不可思议大智慧神通之力，调伏刚强众生，知苦乐法，各遣侍者，问讯世尊。</p>
+            <p>是时，如来含笑，放百千万亿大光明云，所谓大圆满光明云、大慈悲光明云、大智慧光明云、大般若光明云、大三昧光明云、大吉祥光明云、大福德光明云、大功德光明云、大归依光明云、大赞叹光明云。放如是等不可说光明云已。</p>
+            <p>又出种种微妙之音，所谓檀波罗蜜音、尸波罗蜜音、羼提波罗密音、毗离耶波罗蜜音、禅波罗蜜音、般若波罗密音、慈悲音、喜舍音、解脱音、无漏音、智慧音、大智慧音、师子吼音、大师子吼音、云雷音、大云雷音。</p>
+            <p>出如是等不可说不可说音已，娑婆世界，及他方国土，有无量亿天龙鬼神，亦集到忉利天宫，所谓四天王天、忉利天、须焰摩天、兜率陀天、化乐天、他化自在天、梵众天、梵辅天、大梵天、少光天、无量光天、光音天、少净天、无量净天、遍净天、福生天、福爱天、广果天、无想天、无烦天、无热天、善见天、善现天、色究竟天、摩醯首罗天、乃至非想非非想处天，一切天众、龙众、鬼神等众，悉来集会。</p>
+            <p>复有他方国土，及娑婆世界，海神、江神、河神、树神、山神、地神、川泽神、苗稼神、昼神、夜神、空神、天神、饮食神、草木神，如是等神，皆来集会。</p>
+            <p>复有他方国土，及娑婆世界，诸大鬼王，所谓：恶目鬼王、啖血鬼王、啖精气鬼王、啖胎卵鬼王、行病鬼王、摄毒鬼王、慈心鬼王、福利鬼王、大爱敬鬼王，如是等鬼王，皆来集会。</p>
+            <p>尔时释迦牟尼佛、告文殊师利法王子菩萨摩诃萨：「汝观是一切诸佛菩萨及天龙鬼神，此世界、他世界，此国土、他国土，如是今来集会到忉利天者，汝知数不？」</p>
+            <p>文殊师利白佛言：「世尊，若以我神力，千劫测度，不能得知。」</p>
+            <p>佛告文殊师利：「吾以佛眼观故，犹不尽数。此皆是地藏菩萨久远劫来，已度、当度、未度，已成就、当成就、未成就。」</p>
+            <p>文殊师利白佛言：「世尊，我已过去久修善根、证无碍智。闻佛所言，即当信受。小果声闻、天龙八部、及未来世诸众生等，虽闻如来诚实之语，必怀疑惑。设使顶受，未免兴谤。唯愿世尊、广说地藏菩萨摩诃萨，因地作何行、立何愿，而能成就不思议事。」</p>
+            <p>佛告文殊师利：「譬如三千大千世界所有草木丛林、稻麻竹苇、山石微尘，一物一数，作一恒河；一恒河沙，一沙一界；一界之内、一尘一劫；一劫之内，所积尘数，尽充为劫，地藏菩萨证十地果位以来，千倍多于上喻。何况地藏菩萨在声闻、辟支佛地。」</p>
+            <p>文殊师利，此菩萨威神誓愿，不可思议。若未来世，有善男子、善女人，闻是菩萨名字，或赞叹、或瞻礼、或称名、或供养，乃至彩画刻镂塑漆形像，是人当得百返生于三十三天，永不堕恶道。」</p>
+            <!-- 此处省略部分经文内容 -->
             
-            <div class="card fade-in delay-3">
-                <div class="icon">◈</div>
-                <a href="#" class="btn">发现</a>
-            </div>
+            <h3 class="golden-glow">阎浮众生业感品第四</h3>
+            <p>尔时地藏菩萨摩诃萨白佛言：「世尊，我承佛如来威神力故，遍百千万亿世界，分是身形，救拔一切业报众生。若非如来大慈力故，即不能作如是变化。我今又蒙佛付嘱，至阿逸多成佛以来，六道众生，遣令度脱。唯然世尊，愿不有虑。」</p>
+            <p>尔时佛告地藏菩萨：「一切众生，未解脱者，性识无定，恶习结业，善习结果。为善为恶，逐境而生。轮转五道，暂无休息，动经尘劫，迷惑障难。如鱼游网，将是长流，脱入暂出，又复遭网。以是等辈，吾当忧念。汝既毕是往愿，累劫重誓，广度罪辈，吾复何虑！」</p>
+            <!-- 经文内容省略 -->
         </div>
         
-        <footer class="fade-in delay-3">
-            <p>© 2023 虚化背景设计示例 | 全球访问统计</p>
+        <footer class="fade-in delay-3 golden-glow">
+            <p>© 地藏王本愿经 · 佛教经典诵读</p>
         </footer>
     </div>
     
@@ -566,8 +652,8 @@
             
             // 备用音乐源列表（如果主要源失败）
             const musicSources = [
-                'https://raw.githubusercontent.com/197195/dzw/main/img.mp3',
-                'https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3',
+                'https://assets.mixkit.co/music/preview/mixkit-meditation-ambience-1127.mp3',
+                'https://assets.mixkit.co/music/preview/mixkit-relaxing-waves-ambience-1136.mp3',
                 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
             ];
             
@@ -727,8 +813,8 @@
             });
             
             // 设置初始音量
-            audio.volume = 0.7;
-            volumeLevel.style.width = '70%';
+            audio.volume = 0.5;
+            volumeLevel.style.width = '50%';
             
             // 格式化时间显示
             function formatTime(seconds) {
@@ -738,19 +824,6 @@
                 const secs = Math.floor(seconds % 60);
                 return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
             }
-            
-            // 卡片悬停效果
-            const cards = document.querySelectorAll('.card');
-            
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-10px)';
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
         });
     </script>
 </body>
