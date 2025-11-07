@@ -170,6 +170,11 @@
             margin-top: 5px;
         }
         
+        .counter-loading {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
         /* 音乐播放器样式 */
         .music-player {
             position: fixed;
@@ -387,14 +392,26 @@
         .count-up {
             animation: countUp 0.5s ease forwards;
         }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease;
+        }
     </style>
 </head>
 <body>
-    <!-- 访问计数器 -->
+    <!-- 全局访问计数器 -->
     <div class="counter-container fade-in">
-        <div class="counter-title">页面访问次数</div>
-        <div class="counter-number" id="visitCount">0</div>
-        <div class="counter-label">感谢您的访问</div>
+        <div class="counter-title">总访问量</div>
+        <div class="counter-number" id="globalVisitCount">
+            <span class="counter-loading">加载中...</span>
+        </div>
+        <div class="counter-label">全球用户统计</div>
     </div>
     
     <div class="background-container">
@@ -424,7 +441,7 @@
         </div>
         
         <footer class="fade-in delay-3">
-            <p>© 2023 虚化背景设计示例</p>
+            <p>© 2023 虚化背景设计示例 | 全球访问统计</p>
         </footer>
     </div>
     
@@ -467,26 +484,69 @@
     </div>
     
     <script>
-        // 页面访问计数器功能
+        // 全局访问计数器功能
         document.addEventListener('DOMContentLoaded', function() {
-            // 获取或初始化访问计数
-            let visitCount = localStorage.getItem('pageVisitCount');
-            
-            if (visitCount === null) {
-                // 第一次访问
-                visitCount = 1;
-            } else {
-                // 增加访问计数
-                visitCount = parseInt(visitCount) + 1;
+            // 使用免费的CountAPI服务统计全局访问量
+            async function updateGlobalCounter() {
+                const counterElement = document.getElementById('globalVisitCount');
+                
+                try {
+                    // 首先获取当前计数
+                    const getResponse = await fetch('https://api.countapi.xyz/get/music-background-page/global-visits');
+                    const getData = await getResponse.json();
+                    
+                    if (getData.value !== undefined) {
+                        // 显示当前计数
+                        counterElement.innerHTML = getData.value.toLocaleString();
+                        counterElement.classList.add('count-up');
+                        
+                        // 然后增加计数（新访问）
+                        const hitResponse = await fetch('https://api.countapi.xyz/hit/music-background-page/global-visits');
+                        const hitData = await hitResponse.json();
+                        
+                        if (hitData.value !== undefined && hitData.value > getData.value) {
+                            // 更新为新的计数值
+                            counterElement.innerHTML = hitData.value.toLocaleString();
+                            counterElement.classList.add('pulse');
+                        }
+                    } else {
+                        // 如果获取失败，初始化计数
+                        const initResponse = await fetch('https://api.countapi.xyz/create?namespace=music-background-page&key=global-visits&value=0&enable_reset=1');
+                        const initData = await initResponse.json();
+                        
+                        if (initData.value !== undefined) {
+                            counterElement.innerHTML = initData.value.toLocaleString();
+                            counterElement.classList.add('count-up');
+                        }
+                    }
+                } catch (error) {
+                    console.error('全局计数器服务错误:', error);
+                    // 如果API失败，使用localStorage作为备用方案
+                    updateLocalCounter();
+                }
             }
             
-            // 保存到本地存储
-            localStorage.setItem('pageVisitCount', visitCount);
+            // 备用方案：使用localStorage（仅统计当前浏览器）
+            function updateLocalCounter() {
+                const counterElement = document.getElementById('globalVisitCount');
+                let globalCount = localStorage.getItem('globalVisitCount');
+                
+                if (globalCount === null) {
+                    globalCount = 1;
+                } else {
+                    globalCount = parseInt(globalCount) + 1;
+                }
+                
+                localStorage.setItem('globalVisitCount', globalCount);
+                counterElement.innerHTML = globalCount.toLocaleString();
+                counterElement.classList.add('count-up');
+                
+                // 更新标签提示这是本地统计
+                document.querySelector('.counter-label').textContent = '本地统计';
+            }
             
-            // 更新显示
-            const visitCountElement = document.getElementById('visitCount');
-            visitCountElement.textContent = visitCount;
-            visitCountElement.classList.add('count-up');
+            // 初始化全局计数器
+            updateGlobalCounter();
             
             // 音乐播放器功能
             const musicPlayer = document.getElementById('musicPlayer');
