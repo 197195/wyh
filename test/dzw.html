@@ -83,7 +83,8 @@
         .chapter-nav {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
         }
         
         .nav-btn {
@@ -126,7 +127,7 @@
             padding: 40px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            margin-bottom: 30px;
+            margin-bottom: 20px; /* 减少底部间距，为导航按钮腾出位置 */
             text-align: left;
             line-height: 2.2;
             max-height: 65vh;
@@ -518,16 +519,6 @@
         <div class="logo fade-in golden-glow">地藏王本愿经</div>
         <p class="subtitle fade-in delay-1 golden-glow">佛教经典 · 大乘佛教重要典籍</p>
         
-        <!-- 章节导航 -->
-        <div class="chapter-nav fade-in delay-2">
-            <button class="nav-btn" id="prevChapter">
-                <span>◀</span> 上一章
-            </button>
-            <button class="nav-btn" id="nextChapter">
-                下一章 <span>▶</span>
-            </button>
-        </div>
-        
         <div class="chapter-info fade-in delay-2 golden-glow" id="chapterInfo">
             当前章节：卷上 · 忉利天宫神通品第一
         </div>
@@ -535,6 +526,16 @@
         <!-- 文本内容模块 -->
         <div class="text-content fade-in delay-2" id="scriptureContent">
             <!-- 内容将通过JavaScript动态加载 -->
+        </div>
+        
+        <!-- 章节导航 - 移到了经文内容下方 -->
+        <div class="chapter-nav fade-in delay-2">
+            <button class="nav-btn" id="prevChapter">
+                <span>◀</span> 上一章
+            </button>
+            <button class="nav-btn" id="nextChapter">
+                下一章 <span>▶</span>
+            </button>
         </div>
         
         <footer class="fade-in delay-3 golden-glow">
