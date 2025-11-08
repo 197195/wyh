@@ -638,6 +638,646 @@
     
     <script>
         // 地藏王本愿经全章节内容
+        <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地藏王本愿经 - 全文诵读</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'KaiTi', 'STKaiti', 'SimKai', serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #d4af37;
+            line-height: 2;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .background-image {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://p1.ssl.qhimgs1.com/sdr/400__/t0198d3cb4cca6eea07.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px) brightness(0.8);
+            transform: scale(1.05);
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 10px 20px 40px;;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            margin-bottom: 0px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.7), 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto -50px;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+        }
+        
+        /* 章节导航 */
+        .chapter-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            margin-bottom: 0px;
+        }
+        
+        .nav-btn {
+            padding: 8px 18px;
+            background: rgba(212, 175, 55, 0.2);
+            color: #d4af37;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .chapter-info {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* 文本内容模块 */
+        .text-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 20px;
+            text-align: left;
+            line-height: 2.2;
+            max-height: 65vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(212, 175, 55, 0.3) transparent;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .text-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .text-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .text-content::-webkit-scrollbar-thumb {
+            background-color: rgba(212, 175, 55, 0.3);
+            border-radius: 3px;
+        }
+        
+        .text-content h2 {
+            margin-bottom: 25px;
+            color: #d4af37;
+            font-weight: 400;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 12px;
+            text-align: center;
+            font-size: 1.8rem;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+        }
+        
+        .text-content h3 {
+            margin: 25px 0 12px;
+            color: #d4af37;
+            font-weight: 400;
+            font-size: 1.5rem;
+            text-shadow: 0 0 6px rgba(212, 175, 55, 0.5);
+        }
+        
+        .text-content p {
+            margin-bottom: 18px;
+            opacity: 0.95;
+            text-indent: 2em;
+            font-size: 1.15rem;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+        }
+        
+        .text-content .buddha-name {
+            color: #f9e076;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(249, 224, 118, 0.6);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            width: 100%;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+        }
+        
+        /* 访问计数器样式 - 移到左下角，变小且更透明 */
+        .counter-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(30, 30, 30, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 6px;
+            padding: 8px 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            z-index: 1000;
+            text-align: center;
+            opacity: 0.5;
+        }
+        
+        .counter-title {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-bottom: 2px;
+            color: #d4af37;
+            text-shadow: 0 0 3px rgba(212, 175, 55, 0.3);
+        }
+        
+        .counter-number {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+        }
+        
+        .counter-label {
+            font-size: 0.6rem;
+            opacity: 0.6;
+            margin-top: 2px;
+            color: #d4af37;
+        }
+        
+        /* 简化音乐播放器样式 - 移到右下角，调整布局 */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(30, 30, 30, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.7;
+            width: 160px;
+        }
+        
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            flex-shrink: 0;
+        }
+        
+        .play-btn:hover {
+            background: rgba(212, 175, 55, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+        }
+        
+        .play-icon {
+            font-size: 1.1rem;
+            color: #f0e6d2;
+        }
+        
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        .volume-icon {
+            font-size: 1rem;
+            margin-right: 8px;
+            opacity: 0.8;
+            color: #d4af37;
+            flex-shrink: 0;
+        }
+        
+        .volume-slider {
+            width: 70px;
+            height: 4px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            flex-grow: 1;
+        }
+        
+        .volume-level {
+            height: 100%;
+            background: #d4af37;
+            border-radius: 2px;
+            width: 50%;
+            box-shadow: 0 0 4px rgba(212, 175, 55, 0.6);
+        }
+        
+        .loading-text {
+            font-size: 0.7rem;
+            color: #d4af37;
+            text-align: center;
+            opacity: 0.8;
+            width: 100%;
+        }
+        
+        .error-message {
+            color: #ff9966;
+            font-size: 0.65rem;
+            text-align: center;
+            margin-top: 2px;
+            width: 100%;
+            line-height: 1.2;
+        }
+
+        /* 中国电信广告样式 - 调整为更小更透明 */
+        .telecom-ad {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(30, 30, 30, 0.6); /* 更透明 */
+            backdrop-filter: blur(8px);
+            border-radius: 8px; /* 更小的圆角 */
+            padding: 12px; /* 更小的内边距 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 更小的阴影 */
+            border: 1px solid rgba(212, 175, 55, 0.3); /* 更细的边框 */
+            z-index: 999;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0.7; /* 整体更透明 */
+            width: 80px; /* 固定宽度 */
+            height: 80px; /* 固定高度 */
+        }
+
+        .telecom-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px; /* 更小的间距 */
+            text-decoration: none;
+            height: 100%;
+            justify-content: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 18px;
+            height: 18px;
+            background: rgba(212, 175, 55, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: #121212;
+            transition: all 0.2s ease;
+            border: 1px solid #d4af37;
+            z-index: 1001;
+        }
+
+        .close-btn:hover {
+            background: #d4af37;
+            transform: scale(1.1);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+        }
+
+        .telecom-logo {
+            width: 30px; /* 更小的图标 */
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05); /* 更透明的背景 */
+            border-radius: 4px;
+            padding: 2px;
+        }
+
+        .telecom-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            filter: brightness(0) invert(1);
+        }
+
+        .telecom-text {
+            color: #d4af37;
+            font-size: 0.7rem; /* 更小的字体 */
+            font-weight: 500;
+            text-align: center;
+            text-shadow: 0 0 3px rgba(212, 175, 55, 0.4);
+            opacity: 0.9;
+        }
+        
+        /* 添加链接提示样式 */
+        .link-hint {
+            color: #d4af37;
+            font-size: 0.5rem; /* 更小的字体 */
+            opacity: 0.7;
+            margin-top: 2px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            .text-content {
+                padding: 25px;
+                max-height: 60vh;
+            }
+            
+            .text-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .text-content h3 {
+                font-size: 1.3rem;
+            }
+            
+            .text-content p {
+                font-size: 1.05rem;
+                line-height: 2;
+            }
+            
+            .music-player {
+                right: 10px;
+                bottom: 10px;
+                padding: 10px;
+                gap: 6px;
+                width: 140px;
+            }
+            
+            .player-controls {
+                gap: 10px;
+            }
+            
+            .counter-container {
+                bottom: 10px;
+                left: 10px;
+                padding: 6px 10px;
+            }
+            
+            .counter-number {
+                font-size: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+
+            .telecom-ad {
+                right: 10px;
+                padding: 10px;
+                width: 70px;
+                height: 70px;
+            }
+            
+            .telecom-logo {
+                width: 25px;
+                height: 25px;
+            }
+            
+            .telecom-text {
+                font-size: 0.6rem;
+            }
+            
+            .close-btn {
+                width: 16px;
+                height: 16px;
+                font-size: 10px;
+                top: -6px;
+                right: -6px;
+            }
+            
+            .link-hint {
+                font-size: 0.45rem;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; opacity: 0; }
+        .delay-2 { animation-delay: 0.4s; opacity: 0; }
+        .delay-3 { animation-delay: 0.6s; opacity: 0; }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .rotating {
+            animation: rotate 2s linear infinite;
+        }
+        
+        @keyframes countUp {
+            from { transform: scale(1.2); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .count-up {
+            animation: countUp 0.5s ease forwards;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease;
+        }
+        
+        @keyframes goldenGlow {
+            0% { text-shadow: 0 0 5px rgba(212, 175, 55, 0.5), 0 0 10px rgba(212, 175, 55, 0.3); }
+            50% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.7), 0 0 20px rgba(212, 175, 55, 0.5); }
+            100% { text-shadow: 0 0 5px rgba(212, 175, 55, 0.5), 0 0 10px rgba(212, 175, 55, 0.3); }
+        }
+        
+        .golden-glow {
+            animation: goldenGlow 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局访问计数器 - 移到左下角 -->
+    <div class="counter-container fade-in">
+        <div class="counter-title">累计访问量</div>
+        <div class="counter-number golden-glow" id="globalVisitCount">
+            <span class="counter-loading">加载中...</span>
+        </div>
+        <div class="counter-label">全球用户统计</div>
+    </div>
+    
+    <div class="background-container">
+        <div class="background-image"></div>
+        <div class="overlay"></div>
+    </div>
+    
+    <div class="container">
+        <div class="logo fade-in golden-glow">地狱不空 誓不成佛</div>
+        <p class="subtitle fade-in delay-1 golden-glow">佛教经典 · 大乘佛教重要典籍</p>
+        
+        <div class="chapter-info fade-in delay-2 golden-glow" id="chapterInfo">
+            当前章节：卷上 · 忉利天宫神通品第一
+        </div>
+        
+        <!-- 文本内容模块 -->
+        <div class="text-content fade-in delay-2" id="scriptureContent">
+            <!-- 内容将通过JavaScript动态加载 -->
+        </div>
+        
+        <!-- 章节导航 -->
+        <div class="chapter-nav fade-in delay-2">
+            <button class="nav-btn" id="prevChapter">
+                <span>◀</span> 上一章
+            </button>
+            <button class="nav-btn" id="nextChapter">
+                下一章 <span>▶</span>
+            </button>
+        </div>
+        
+        <footer class="fade-in delay-3 golden-glow">
+            <p>© 地藏王本愿经 · 佛教经典诵读</p>
+        </footer>
+    </div>
+    
+    <!-- 简化音乐播放器 - 移到右下角，调整布局 -->
+    <div class="music-player fade-in" id="musicPlayer">
+        <div class="player-controls">
+            <div class="play-btn" id="playBtn">
+                <div class="play-icon">▶</div>
+            </div>
+            
+            <div class="volume-controls">
+                <div class="volume-icon">🔊</div>
+                <div class="volume-slider" id="volumeSlider">
+                    <div class="volume-level" id="volumeLevel"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 错误信息现在在播放按钮下面 -->
+        <div class="error-message" id="errorMessage" style="display: none;">
+            所有音乐源均加载失败，请检查网络连接
+        </div>
+        
+        <div class="loading-text" id="loadingText">点击播放按钮开始播放</div>
+    </div>
+
+    <!-- 中国电信图标 - 修改为更小更透明 -->
+    <div class="telecom-ad fade-in" id="telecomAd">
+        <div class="close-btn" id="closeAd">×</div>
+        <a href="https://share20251108.haonetwork.cn/a?l=hx6oc2i0Jd3Id7_1295" target="_blank" class="telecom-content">
+            <div class="telecom-logo">
+                <span style="font-size: 1.2rem; color: #d4af37;">📡</span>
+            </div>
+            <div class="telecom-text">中国电信</div>
+            <div class="link-hint">点击了解</div>
+        </a>
+    </div>
+    
+    <script>
+        // 地藏王本愿经全章节内容
         const chapters = [
             {
                 title: "卷上 · 忉利天宫神通品第一",
@@ -677,6 +1317,286 @@
                 `
             }
         ];
+
+        // 当前章节索引
+        let currentChapterIndex = 0;
+        
+        // DOM元素
+        const scriptureContent = document.getElementById('scriptureContent');
+        const chapterInfo = document.getElementById('chapterInfo');
+        const prevChapterBtn = document.getElementById('prevChapter');
+        const nextChapterBtn = document.getElementById('nextChapter');
+        
+        // 初始化显示第一章
+        function showChapter(index) {
+            if (index >= 0 && index < chapters.length) {
+                currentChapterIndex = index;
+                const chapter = chapters[index];
+                scriptureContent.innerHTML = chapter.content;
+                chapterInfo.textContent = `当前章节：${chapter.title}`;
+                
+                // 更新按钮状态
+                prevChapterBtn.disabled = currentChapterIndex === 0;
+                nextChapterBtn.disabled = currentChapterIndex === chapters.length - 1;
+                
+                // 滚动到顶部
+                scriptureContent.scrollTop = 0;
+            }
+        }
+        
+        // 章节切换事件
+        prevChapterBtn.addEventListener('click', () => {
+            if (currentChapterIndex > 0) {
+                showChapter(currentChapterIndex - 1);
+            }
+        });
+        
+        nextChapterBtn.addEventListener('click', () => {
+            if (currentChapterIndex < chapters.length - 1) {
+                showChapter(currentChapterIndex + 1);
+            }
+        });
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 显示第一章
+            showChapter(0);
+            
+            // 全局访问计数器功能
+            async function updateGlobalCounter() {
+                const counterElement = document.getElementById('globalVisitCount');
+                
+                try {
+                    const getResponse = await fetch('https://api.countapi.xyz/get/music-background-page/global-visits');
+                    const getData = await getResponse.json();
+                    
+                    if (getData.value !== undefined) {
+                        counterElement.innerHTML = getData.value.toLocaleString();
+                        counterElement.classList.add('count-up');
+                        
+                        const hitResponse = await fetch('https://api.countapi.xyz/hit/music-background-page/global-visits');
+                        const hitData = await hitResponse.json();
+                        
+                        if (hitData.value !== undefined && hitData.value > getData.value) {
+                            counterElement.innerHTML = hitData.value.toLocaleString();
+                            counterElement.classList.add('pulse');
+                        }
+                    } else {
+                        const initResponse = await fetch('https://api.countapi.xyz/create?namespace=music-background-page&key=global-visits&value=0&enable_reset=1');
+                        const initData = await initResponse.json();
+                        
+                        if (initData.value !== undefined) {
+                            counterElement.innerHTML = initData.value.toLocaleString();
+                            counterElement.classList.add('count-up');
+                        }
+                    }
+                } catch (error) {
+                    console.error('全局计数器服务错误:', error);
+                    updateLocalCounter();
+                }
+            }
+            
+            function updateLocalCounter() {
+                const counterElement = document.getElementById('globalVisitCount');
+                let globalCount = localStorage.getItem('globalVisitCount');
+                
+                if (globalCount === null) {
+                    globalCount = 1;
+                } else {
+                    globalCount = parseInt(globalCount) + 1;
+                }
+                
+                localStorage.setItem('globalVisitCount', globalCount);
+                counterElement.innerHTML = globalCount.toLocaleString();
+                counterElement.classList.add('count-up');
+                document.querySelector('.counter-label').textContent = '本地统计';
+            }
+            
+            updateGlobalCounter();
+            
+            // 音乐播放器功能
+            const musicPlayer = document.getElementById('musicPlayer');
+            const playBtn = document.getElementById('playBtn');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const volumeLevel = document.getElementById('volumeLevel');
+            const loadingText = document.getElementById('loadingText');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            const audio = new Audio();
+            const musicSources = [
+                'https://raw.githubusercontent.com/197195/dzw/main/cxn.mp3',
+                'https://raw.githubusercontent.com/197195/dzw/main/miaolianhua.m4a',
+                'https://raw.githubusercontent.com/197195/dzw/main/dzw.m4a'
+            ];
+            
+            let currentSourceIndex = 0;
+            let isPlaying = false;
+            let hasTriedPlay = false;
+
+            function setAudioSource(index) {
+                if (index < musicSources.length) {
+                    audio.src = musicSources[index];
+                    loadingText.textContent = '点击播放按钮开始播放';
+                    errorMessage.style.display = 'none';
+                }
+            }
+
+            // 初始化第一个音乐源
+            setAudioSource(currentSourceIndex);
+
+            function tryNextSource() {
+                currentSourceIndex++;
+                if (currentSourceIndex < musicSources.length) {
+                    setAudioSource(currentSourceIndex);
+                    return true;
+                }
+                return false;
+            }
+
+            // 设置初始状态为暂停
+            playBtn.innerHTML = '<div class="play-icon">▶</div>';
+            loadingText.textContent = '点击播放按钮开始播放';
+            isPlaying = false;
+
+            playBtn.addEventListener('click', function() {
+                if (isPlaying) {
+                    // 暂停音乐
+                    audio.pause();
+                    playBtn.innerHTML = '<div class="play-icon">▶</div>';
+                    playBtn.classList.remove('rotating');
+                    loadingText.textContent = '音乐已暂停';
+                    isPlaying = false;
+                } else {
+                    // 播放音乐
+                    playBtn.innerHTML = '<div class="play-icon rotating">⟳</div>';
+                    loadingText.textContent = '正在加载音乐...';
+                    errorMessage.style.display = 'none';
+                    hasTriedPlay = true;
+                    
+                    // 如果音频还没有加载，重新设置源
+                    if (!audio.src || audio.error) {
+                        setAudioSource(currentSourceIndex);
+                    }
+                    
+                    audio.play().then(() => {
+                        playBtn.innerHTML = '<div class="play-icon">❚❚</div>';
+                        playBtn.classList.remove('rotating');
+                        loadingText.textContent = '正在播放...';
+                        isPlaying = true;
+                    }).catch(e => {
+                        console.log('播放失败:', e);
+                        
+                        if (tryNextSource()) {
+                            loadingText.textContent = '尝试备用音乐源...';
+                            setTimeout(() => {
+                                audio.play().catch(e => {
+                                    console.log('备用源也失败:', e);
+                                    handlePlayError();
+                                });
+                            }, 500);
+                        } else {
+                            handlePlayError();
+                        }
+                    });
+                }
+            });
+
+            function handlePlayError() {
+                playBtn.innerHTML = '<div class="play-icon">▶</div>';
+                playBtn.classList.remove('rotating');
+                loadingText.textContent = '播放失败，点击重试';
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = '音乐加载失败，请检查网络连接';
+            }
+
+            audio.addEventListener('loadeddata', function() {
+                if (!hasTriedPlay) {
+                    loadingText.textContent = '点击播放按钮开始播放';
+                }
+            });
+
+            audio.addEventListener('canplay', function() {
+                loadingText.textContent = '点击播放按钮开始播放';
+            });
+
+            audio.addEventListener('error', function(e) {
+                console.log('音频错误:', e);
+                if (isPlaying) {
+                    handlePlayError();
+                }
+            });
+
+            audio.addEventListener('play', function() {
+                isPlaying = true;
+                loadingText.textContent = '正在播放...';
+                errorMessage.style.display = 'none';
+            });
+
+            audio.addEventListener('pause', function() {
+                isPlaying = false;
+                if (audio.currentTime > 0 && audio.currentTime < audio.duration) {
+                    loadingText.textContent = '音乐已暂停';
+                }
+            });
+
+            audio.addEventListener('ended', function() {
+                isPlaying = false;
+                playBtn.innerHTML = '<div class="play-icon">▶</div>';
+                loadingText.textContent = '播放完成，点击重新播放';
+            });
+            
+            volumeSlider.addEventListener('click', function(e) {
+                const width = this.clientWidth;
+                const clickX = e.offsetX;
+                const volume = Math.min(Math.max(clickX / width, 0), 1);
+                
+                audio.volume = volume;
+                volumeLevel.style.width = `${volume * 100}%`;
+                
+                const volumeIcon = document.querySelector('.volume-icon');
+                if (volume === 0) {
+                    volumeIcon.textContent = '🔇';
+                } else if (volume < 0.5) {
+                    volumeIcon.textContent = '🔈';
+                } else {
+                    volumeIcon.textContent = '🔊';
+                }
+            });
+            
+            audio.volume = 0.5;
+            volumeLevel.style.width = '50%';
+
+            // 中国电信广告关闭功能
+            const telecomAd = document.getElementById('telecomAd');
+            const closeAd = document.getElementById('closeAd');
+            
+            // 关闭按钮点击事件
+            closeAd.addEventListener('click', function(e) {
+                // 阻止事件冒泡，避免触发链接点击
+                e.stopPropagation();
+                
+                telecomAd.style.opacity = '0';
+                telecomAd.style.transform = 'translateY(-50%) scale(0.8)';
+                
+                setTimeout(() => {
+                    telecomAd.style.display = 'none';
+                }, 300);
+            });
+            
+            // 点击广告区域跳转到链接（除了关闭按钮）
+            telecomAd.addEventListener('click', function(e) {
+                // 如果点击的是关闭按钮，不执行跳转
+                if (e.target === closeAd || closeAd.contains(e.target)) {
+                    return;
+                }
+                
+                // 否则跳转到指定链接
+                window.open('https://share20251108.haonetwork.cn/a?l=hx6oc2i0Jd3Id7_1295', '_blank');
+            });
+        });
+    </script>
+</body>
+</html>
 
         // 当前章节索引
         let currentChapterIndex = 0;
@@ -955,4 +1875,3 @@
     </script>
 </body>
 </html>
-
