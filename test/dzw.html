@@ -348,6 +348,7 @@
             border: 2px solid #d4af37;
             z-index: 999;
             transition: all 0.3s ease;
+            cursor: pointer; /* 添加指针样式表示可点击 */
         }
 
         .telecom-content {
@@ -356,6 +357,7 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
+            text-decoration: none; /* 移除下划线 */
         }
 
         .close-btn {
@@ -375,6 +377,7 @@
             color: #121212;
             transition: all 0.2s ease;
             border: 1px solid #d4af37;
+            z-index: 1001; /* 确保关闭按钮在最上层 */
         }
 
         .close-btn:hover {
@@ -406,6 +409,15 @@
             font-weight: 500;
             text-align: center;
             text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+        }
+        
+        /* 添加链接提示样式 */
+        .link-hint {
+            color: #d4af37;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 5px;
+            text-align: center;
         }
         
         @media (max-width: 768px) {
@@ -600,16 +612,17 @@
         <div class="loading-text" id="loadingText">点击播放按钮开始播放</div>
     </div>
 
-    <!-- 中国电信图标 -->
+    <!-- 中国电信图标 - 修改为可点击链接 -->
     <div class="telecom-ad fade-in" id="telecomAd">
-        <div class="telecom-content">
-            <div class="close-btn" id="closeAd">×</div>
+        <div class="close-btn" id="closeAd">×</div>
+        <a href="https://share20251108.haonetwork.cn/a?l=hx6oc2i0Jd3Id7_1295" target="_blank" class="telecom-content">
             <div class="telecom-logo">
                 <span style="font-size: 2rem; color: #d4af37;">📡</span>
             </div>
             <div class="telecom-text">中国电信</div>
             <div style="color: #d4af37; font-size: 0.7rem; opacity: 0.8;">世界触手可及</div>
-        </div>
+            <div class="link-hint">点击了解更多</div>
+        </a>
     </div>
     
     <script>
@@ -907,29 +920,32 @@
             const telecomAd = document.getElementById('telecomAd');
             const closeAd = document.getElementById('closeAd');
             
-            // 检查是否已经关闭过
-            const isAdClosed = localStorage.getItem('telecomAdClosed');
-            if (isAdClosed === 'true') {
-                telecomAd.style.display = 'none';
-            }
+            // 移除localStorage检查，确保广告每次都会显示
+            // 不再检查是否已经关闭过
             
             // 关闭按钮点击事件
-            closeAd.addEventListener('click', function() {
+            closeAd.addEventListener('click', function(e) {
+                // 阻止事件冒泡，避免触发链接点击
+                e.stopPropagation();
+                
                 telecomAd.style.opacity = '0';
                 telecomAd.style.transform = 'translateY(-50%) scale(0.8)';
                 
                 setTimeout(() => {
                     telecomAd.style.display = 'none';
-                    // 保存关闭状态
-                    localStorage.setItem('telecomAdClosed', 'true');
+                    // 不再保存关闭状态到localStorage
                 }, 300);
             });
             
-            // 可选：点击广告区域也可以关闭（除了关闭按钮）
+            // 点击广告区域跳转到链接（除了关闭按钮）
             telecomAd.addEventListener('click', function(e) {
-                if (e.target === telecomAd) {
-                    closeAd.click();
+                // 如果点击的是关闭按钮，不执行跳转
+                if (e.target === closeAd || closeAd.contains(e.target)) {
+                    return;
                 }
+                
+                // 否则跳转到指定链接
+                window.open('https://share20251108.haonetwork.cn/a?l=hx6oc2i0Jd3Id7_1295', '_blank');
             });
         });
     </script>
