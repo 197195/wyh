@@ -27,6 +27,7 @@
             color: var(--dark);
             line-height: 1.6;
             font-size: 14px;
+            padding-top: 120px; /* 为固定头部和实时信息栏留出空间 */
         }
         
         .container {
@@ -47,12 +48,14 @@
             left: 0;
             right: 0;
             z-index: 1000;
+            height: 60px;
         }
         
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 100%;
         }
         
         .logo {
@@ -98,31 +101,19 @@
             color: #ffd700;
         }
         
-        .cta-button {
-            background-color: var(--accent);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-        
-        .cta-button:hover {
-            background-color: #e64a19;
-            transform: translateY(-2px);
-        }
-        
-        /* 实时办理动态模块 - 手机优化 */
+        /* 实时办理动态模块 - 修复显示问题 */
         .user-success-section {
             background: rgba(220, 53, 69, 0.95);
             color: white;
             padding: 10px 0;
-            margin-top: 60px;
-            position: relative;
+            position: fixed;
+            top: 60px; /* 在头部下方 */
+            left: 0;
+            right: 0;
             z-index: 999;
+            height: 40px;
+            display: flex;
+            align-items: center;
         }
         
         .user-banner-content {
@@ -130,6 +121,7 @@
             align-items: center;
             justify-content: flex-start;
             overflow: hidden;
+            width: 100%;
         }
         
         .banner-icon {
@@ -187,7 +179,7 @@
             }
         }
         
-        /* 英雄区域 - 手机优化 */
+        /* 英雄区域 - 调整位置 */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
@@ -209,6 +201,23 @@
             max-width: 100%;
             margin: 0 auto 20px;
             line-height: 1.5;
+        }
+        
+        .cta-button {
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            background-color: #e64a19;
+            transform: translateY(-2px);
         }
         
         /* 立即申请区域 - 手机优化 */
@@ -382,6 +391,21 @@
         
         /* 响应式设计 - 手机优先 */
         @media (max-width: 768px) {
+            body {
+                padding-top: 100px; /* 调整整体padding */
+            }
+            
+            header {
+                height: 50px;
+                padding: 8px 0;
+            }
+            
+            .user-success-section {
+                top: 50px; /* 调整实时信息栏位置 */
+                height: 35px;
+                padding: 8px 0;
+            }
+            
             .header-content {
                 flex-wrap: wrap;
             }
@@ -418,14 +442,14 @@
             }
             
             .user-banner-content {
-                flex-direction: column;
-                align-items: flex-start;
+                flex-direction: row; /* 保持水平布局 */
+                align-items: center;
             }
             
             .user-scroll-container {
-                width: 100%;
-                margin-left: 0;
-                margin-top: 5px;
+                width: auto;
+                margin-left: 8px;
+                margin-top: 0;
             }
             
             .hero h1 {
@@ -486,7 +510,7 @@
         </div>
     </header>
 
-    <!-- 实时办理动态模块 -->
+    <!-- 实时办理动态模块 - 现在应该能正常显示了 -->
     <section class="user-success-section">
         <div class="container">
             <div class="user-banner-content">
@@ -510,6 +534,9 @@
         <div class="container">
             <h1>流量卡代理办理平台</h1>
             <p>高佣金、稳定收益、专业培训，开启您的流量卡代理事业</p>
+            <a href="https://hy.yunhaoka.com/#/pages/public/register?code=90831567" class="cta-button" target="_blank">
+                立即申请代理资格
+            </a>
         </div>
     </section>
 
