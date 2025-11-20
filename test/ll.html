@@ -27,7 +27,7 @@
             color: var(--dark);
             line-height: 1.6;
             font-size: 14px;
-            padding-top: 120px; /* 为固定头部和实时信息栏留出空间 */
+            padding-top: 100px; /* 为固定头部和实时信息栏留出空间 */
         }
         
         .container {
@@ -48,7 +48,7 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            height: 60px;
+            height: 50px;
         }
         
         .header-content {
@@ -105,13 +105,13 @@
         .user-success-section {
             background: rgba(220, 53, 69, 0.95);
             color: white;
-            padding: 10px 0;
+            padding: 8px 0;
             position: fixed;
-            top: 60px; /* 在头部下方 */
+            top: 50px; /* 在头部下方 */
             left: 0;
             right: 0;
             z-index: 999;
-            height: 40px;
+            height: 35px;
             display: flex;
             align-items: center;
         }
@@ -179,13 +179,13 @@
             }
         }
         
-        /* 英雄区域 - 调整位置 */
+        /* 英雄区域 - 调整位置和样式 */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
             color: white;
-            padding: 40px 0;
+            padding: 50px 0;
             text-align: center;
             margin-top: 0;
         }
@@ -199,67 +199,26 @@
         .hero p {
             font-size: 14px;
             max-width: 100%;
-            margin: 0 auto 20px;
+            margin: 0 auto 25px;
             line-height: 1.5;
         }
         
         .cta-button {
             background-color: var(--accent);
             color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 16px;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-        
-        .cta-button:hover {
-            background-color: #e64a19;
-            transform: translateY(-2px);
-        }
-        
-        /* 立即申请区域 - 手机优化 */
-        .apply-section {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            padding: 30px 0;
-            text-align: center;
-        }
-        
-        .apply-content {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-        
-        .apply-title {
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
-        
-        .apply-description {
-            font-size: 14px;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        
-        .apply-button {
-            background-color: white;
-            color: #4CAF50;
             padding: 12px 30px;
             border-radius: 25px;
             text-decoration: none;
-            font-size: 16px;
             font-weight: bold;
+            font-size: 16px;
             transition: all 0.3s;
             display: inline-block;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         
-        .apply-button:hover {
-            background-color: #f8f9fa;
-            transform: translateY(-3px);
+        .cta-button:hover {
+            background-color: #e64a19;
+            transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(0,0,0,0.3);
         }
         
@@ -392,7 +351,7 @@
         /* 响应式设计 - 手机优先 */
         @media (max-width: 768px) {
             body {
-                padding-top: 100px; /* 调整整体padding */
+                padding-top: 85px; /* 调整整体padding */
             }
             
             header {
@@ -456,12 +415,12 @@
                 font-size: 22px;
             }
             
-            .apply-title {
-                font-size: 18px;
+            .hero p {
+                font-size: 14px;
             }
             
-            .apply-button {
-                padding: 10px 25px;
+            .cta-button {
+                padding: 12px 25px;
                 font-size: 15px;
             }
         }
@@ -510,7 +469,7 @@
         </div>
     </header>
 
-    <!-- 实时办理动态模块 - 现在应该能正常显示了 -->
+    <!-- 实时办理动态模块 -->
     <section class="user-success-section">
         <div class="container">
             <div class="user-banner-content">
@@ -537,19 +496,6 @@
             <a href="https://hy.yunhaoka.com/#/pages/public/register?code=90831567" class="cta-button" target="_blank">
                 立即申请代理资格
             </a>
-        </div>
-    </section>
-
-    <!-- 立即申请代理资格模块 -->
-    <section class="apply-section">
-        <div class="container">
-            <div class="apply-content">
-                <h2 class="apply-title">立即申请代理资格</h2>
-                <p class="apply-description">加入我们，享受行业内最高佣金比例，获得稳定收益和专业支持</p>
-                <a href="https://hy.yunhaoka.com/#/pages/public/register?code=90831567" class="apply-button" target="_blank">
-                    立即申请代理资格
-                </a>
-            </div>
         </div>
     </section>
 
