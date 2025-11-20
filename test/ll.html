@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
         }
         
         :root {
@@ -26,20 +26,27 @@
             background-color: #f5f7fa;
             color: var(--dark);
             line-height: 1.6;
+            font-size: 14px;
         }
         
         .container {
-            max-width: 1200px;
+            width: 100%;
+            max-width: 100%;
             margin: 0 auto;
             padding: 0 15px;
         }
         
-        /* 头部样式 */
+        /* 头部样式 - 手机优化 */
         header {
             background: linear-gradient(135deg, var(--primary), #1a4d8c);
             color: white;
-            padding: 15px 0;
+            padding: 12px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
         }
         
         .header-content {
@@ -51,13 +58,23 @@
         .logo {
             display: flex;
             align-items: center;
-            font-size: 24px;
+            font-size: 18px;
             font-weight: bold;
         }
         
         .logo i {
-            margin-right: 10px;
-            font-size: 28px;
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        
+        /* 移动端导航菜单 */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
         }
         
         nav ul {
@@ -66,13 +83,14 @@
         }
         
         nav ul li {
-            margin-left: 25px;
+            margin-left: 15px;
         }
         
         nav ul li a {
             color: white;
             text-decoration: none;
             font-weight: 500;
+            font-size: 14px;
             transition: all 0.3s;
         }
         
@@ -83,11 +101,13 @@
         .cta-button {
             background-color: var(--accent);
             color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
+            padding: 8px 16px;
+            border-radius: 20px;
             text-decoration: none;
             font-weight: bold;
+            font-size: 14px;
             transition: all 0.3s;
+            display: inline-block;
         }
         
         .cta-button:hover {
@@ -95,42 +115,42 @@
             transform: translateY(-2px);
         }
         
-        /* 精简透明用户信息横幅 */
-        .transparent-user-banner {
-            position: absolute;
-            top: 80px;
-            left: 0;
-            width: 100%;
-            z-index: 10;
-            background: rgba(26, 35, 126, 0.7);
+        /* 实时办理动态模块 - 手机优化 */
+        .user-success-section {
+            background: rgba(220, 53, 69, 0.95);
             color: white;
-            padding: 8px 0;
-            backdrop-filter: blur(3px);
+            padding: 10px 0;
+            margin-top: 60px;
+            position: relative;
+            z-index: 999;
         }
         
         .user-banner-content {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            overflow: hidden;
         }
         
         .banner-icon {
-            margin-right: 10px;
-            font-size: 16px;
-            color: #4fc3f7;
+            margin-right: 8px;
+            font-size: 14px;
+            color: #ffd700;
+            flex-shrink: 0;
         }
         
         .banner-text {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
+            flex-shrink: 0;
         }
         
         .user-scroll-container {
             overflow: hidden;
             position: relative;
-            height: 20px;
-            width: 300px;
-            margin-left: 10px;
+            height: 18px;
+            flex: 1;
+            margin-left: 8px;
         }
         
         .user-scroll-track {
@@ -138,24 +158,24 @@
             position: absolute;
             left: 0;
             top: 0;
-            animation: scrollUsers 15s linear infinite;
+            animation: scrollUsers 20s linear infinite;
         }
         
         .user-item {
             display: flex;
             align-items: center;
             white-space: nowrap;
-            padding: 0 15px;
-            font-size: 14px;
+            padding: 0 10px;
+            font-size: 12px;
         }
         
         .user-name {
             font-weight: 500;
-            margin-right: 5px;
+            margin-right: 4px;
         }
         
         .user-action {
-            color: #4fc3f7;
+            color: #ffd700;
         }
         
         @keyframes scrollUsers {
@@ -167,169 +187,239 @@
             }
         }
         
-        /* 英雄区域 */
+        /* 英雄区域 - 手机优化 */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
             color: white;
-            padding: 100px 0;
+            padding: 40px 0;
             text-align: center;
-            position: relative;
+            margin-top: 0;
         }
         
         .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
+            font-size: 24px;
+            margin-bottom: 15px;
+            line-height: 1.3;
         }
         
         .hero p {
-            font-size: 20px;
-            max-width: 700px;
-            margin: 0 auto 30px;
+            font-size: 14px;
+            max-width: 100%;
+            margin: 0 auto 20px;
+            line-height: 1.5;
         }
         
-        /* 办理流程 */
+        /* 立即申请区域 - 手机优化 */
+        .apply-section {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        
+        .apply-content {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .apply-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .apply-description {
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .apply-button {
+            background-color: white;
+            color: #4CAF50;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .apply-button:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        
+        /* 办理流程 - 手机优化 */
         .section {
-            padding: 80px 0;
+            padding: 40px 0;
         }
         
         .section-title {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
         }
         
         .section-title h2 {
-            font-size: 36px;
+            font-size: 22px;
             color: var(--primary);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .section-title p {
             color: var(--gray);
-            max-width: 600px;
+            max-width: 100%;
             margin: 0 auto;
+            font-size: 14px;
         }
         
         .process-steps {
             display: flex;
-            justify-content: space-between;
-            margin-top: 50px;
-            position: relative;
-        }
-        
-        .process-steps::before {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: 10%;
-            right: 10%;
-            height: 3px;
-            background: var(--primary);
-            z-index: 1;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 30px;
         }
         
         .step {
             text-align: center;
             position: relative;
-            z-index: 2;
-            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .step-icon {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background: var(--primary);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 30px;
+            margin: 0 auto 15px;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
         .step h3 {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: var(--primary);
+            font-size: 16px;
         }
         
-        /* 代理优势 */
+        .step p {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        /* 代理优势 - 手机优化 */
         .benefits {
             background: var(--light);
         }
         
         .benefit-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
         
         .benefit-card {
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
             transition: transform 0.3s;
         }
         
         .benefit-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
         }
         
         .benefit-icon {
-            width: 70px;
-            height: 70px;
+            width: 50px;
+            height: 50px;
             background: var(--primary);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 30px;
+            margin: 0 auto 15px;
+            font-size: 20px;
         }
         
-        /* 底部样式 */
+        .benefit-card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        .benefit-card p {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        /* 底部样式 - 手机优化 */
         footer {
             background: var(--dark);
             color: white;
-            padding: 40px 0 30px;
+            padding: 30px 0 20px;
         }
         
         .copyright {
             text-align: center;
-            padding-top: 20px;
+            padding-top: 15px;
             border-top: 1px solid #495057;
             color: #adb5bd;
-            font-size: 14px;
+            font-size: 12px;
         }
         
-        /* 响应式设计 */
+        /* 响应式设计 - 手机优先 */
         @media (max-width: 768px) {
             .header-content {
-                flex-direction: column;
-                text-align: center;
+                flex-wrap: wrap;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                display: none;
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            nav.active {
+                display: block;
             }
             
             nav ul {
-                margin-top: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
+                flex-direction: column;
+                width: 100%;
             }
             
             nav ul li {
-                margin: 5px 10px;
+                margin: 5px 0;
+                width: 100%;
+                text-align: center;
             }
             
-            .transparent-user-banner {
-                top: 120px;
-                padding: 6px 0;
+            nav ul li a {
+                display: block;
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
             }
             
             .user-banner-content {
                 flex-direction: column;
+                align-items: flex-start;
             }
             
             .user-scroll-container {
@@ -339,19 +429,37 @@
             }
             
             .hero h1 {
-                font-size: 36px;
+                font-size: 22px;
+            }
+            
+            .apply-title {
+                font-size: 18px;
+            }
+            
+            .apply-button {
+                padding: 10px 25px;
+                font-size: 15px;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .container {
+                max-width: 1200px;
+            }
+            
+            .benefit-cards {
+                grid-template-columns: repeat(2, 1fr);
             }
             
             .process-steps {
-                flex-direction: column;
+                flex-direction: row;
+                justify-content: space-between;
             }
-            
-            .process-steps::before {
-                display: none;
-            }
-            
-            .step {
-                margin-bottom: 30px;
+        }
+        
+        @media (min-width: 1024px) {
+            .benefit-cards {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
     </style>
@@ -365,20 +473,21 @@
                     <i class="fas fa-sim-card"></i>
                     <span>流量卡代理</span>
                 </div>
-                <nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav id="mainNav">
                     <ul>
-                        <!-- 移除了产品中心导航项 -->
                         <li><a href="#process">办理流程</a></li>
                         <li><a href="#benefits">代理优势</a></li>
                     </ul>
                 </nav>
-                <!-- 移除了立即申请代理按钮 -->
             </div>
         </div>
     </header>
 
-    <!-- 精简透明用户信息横幅 -->
-    <div class="transparent-user-banner">
+    <!-- 实时办理动态模块 -->
+    <section class="user-success-section">
         <div class="container">
             <div class="user-banner-content">
                 <div class="banner-icon">
@@ -394,14 +503,26 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- 英雄区域 -->
+    <!-- 流量卡代理办理平台模块 -->
     <section class="hero">
         <div class="container">
             <h1>流量卡代理办理平台</h1>
             <p>高佣金、稳定收益、专业培训，开启您的流量卡代理事业</p>
-            <a href="https://hy.yunhaoka.com/#/pages/public/register?code=90831567" class="cta-button" target="_blank">立即申请代理资格</a>
+        </div>
+    </section>
+
+    <!-- 立即申请代理资格模块 -->
+    <section class="apply-section">
+        <div class="container">
+            <div class="apply-content">
+                <h2 class="apply-title">立即申请代理资格</h2>
+                <p class="apply-description">加入我们，享受行业内最高佣金比例，获得稳定收益和专业支持</p>
+                <a href="https://hy.yunhaoka.com/#/pages/public/register?code=90831567" class="apply-button" target="_blank">
+                    立即申请代理资格
+                </a>
+            </div>
         </div>
     </section>
 
@@ -529,10 +650,32 @@
             }
         }
 
+        // 移动端菜单切换
+        function setupMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mainNav = document.getElementById('mainNav');
+            
+            if (mobileMenuBtn && mainNav) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                });
+                
+                // 点击菜单外区域关闭菜单
+                document.addEventListener('click', function(event) {
+                    if (!event.target.closest('header')) {
+                        mainNav.classList.remove('active');
+                    }
+                });
+            }
+        }
+
         // 页面加载完成后执行
         document.addEventListener('DOMContentLoaded', function() {
             // 生成用户滚动内容
             generateUserScrollContent();
+            
+            // 设置移动端菜单
+            setupMobileMenu();
             
             // 平滑滚动到锚点
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -543,8 +686,12 @@
                     
                     const targetElement = document.querySelector(targetId);
                     if(targetElement) {
+                        // 关闭移动端菜单
+                        const mainNav = document.getElementById('mainNav');
+                        if (mainNav) mainNav.classList.remove('active');
+                        
                         window.scrollTo({
-                            top: targetElement.offsetTop - 80,
+                            top: targetElement.offsetTop - 100,
                             behavior: 'smooth'
                         });
                     }
