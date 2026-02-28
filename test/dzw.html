@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>地藏经 · 跟随光标朗读</title>
+    <title>地藏经 · 跟随光标朗读（带视觉光标）</title>
     <style>
         * {
             margin: 0;
@@ -135,8 +135,10 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(212, 175, 55, 0.3) transparent;
             -webkit-overflow-scrolling: touch;
-            cursor: text; /* 暗示可选择 */
-            user-select: text;
+            cursor: text;
+            position: relative;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         .text-content::-webkit-scrollbar {
@@ -152,37 +154,32 @@
             border-radius: 3px;
         }
 
-        .text-content h2 {
-            margin-bottom: 25px;
-            color: #d4af37;
-            font-weight: 400;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding-bottom: 12px;
-            text-align: center;
-            font-size: 1.8rem;
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
-        }
-
-        .text-content h3 {
-            margin: 25px 0 12px;
-            color: #d4af37;
-            font-weight: 400;
-            font-size: 1.5rem;
-            text-shadow: 0 0 6px rgba(212, 175, 55, 0.5);
-        }
-
+        .text-content h2,
+        .text-content h3,
         .text-content p {
-            margin-bottom: 18px;
-            opacity: 0.95;
+            margin: 0 0 0.5em 0;
             text-indent: 2em;
-            font-size: 1.15rem;
-            text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
         }
 
-        .text-content .buddha-name {
-            color: #f9e076;
-            font-weight: 500;
-            text-shadow: 0 0 8px rgba(249, 224, 118, 0.6);
+        /* 自定义光标样式 */
+        .custom-cursor {
+            position: absolute;
+            width: 3px;
+            height: 1.6em;
+            background: linear-gradient(180deg, #f9e076, #d4af37);
+            border-radius: 2px;
+            box-shadow: 0 0 12px #f9e076, 0 0 20px #d4af37;
+            pointer-events: none;
+            z-index: 10000;
+            transition: all 0.1s ease;
+            animation: blink 1s infinite;
+            opacity: 0.9;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 0.9; }
+            51%, 100% { opacity: 0.3; }
         }
 
         footer {
@@ -234,7 +231,7 @@
             color: #d4af37;
         }
 
-        /* ===== 全新朗读播放器 (右下角, 更强大) ===== */
+        /* ===== 全新朗读播放器 ===== */
         .reader-player {
             position: fixed;
             bottom: 20px;
@@ -266,10 +263,6 @@
             border-bottom: 1px dashed rgba(212, 175, 55, 0.3);
             padding-bottom: 6px;
             letter-spacing: 1px;
-        }
-
-        .player-title span {
-            font-size: 1.1rem;
         }
 
         .progress-area {
@@ -491,11 +484,10 @@
         </footer>
     </div>
 
-    <!-- ========== 全新朗读播放器 ========== -->
+    <!-- 朗读播放器 -->
     <div class="reader-player" id="readerPlayer">
         <div class="player-title"><span>🔊</span> 跟随光标朗读</div>
 
-        <!-- 进度条 -->
         <div class="progress-area" id="progressArea">
             <div class="progress-fill" id="progressFill"></div>
         </div>
@@ -504,7 +496,6 @@
             <span id="durationTime">00:00</span>
         </div>
 
-        <!-- 主控制按钮组 -->
         <div class="control-row">
             <div class="main-controls">
                 <button class="reader-btn small" id="prevSentenceBtn" title="上一句">⏮</button>
@@ -514,7 +505,6 @@
             <button class="reader-btn small" id="stopBtn" title="停止">⏹</button>
         </div>
 
-        <!-- 音量控制条 -->
         <div class="volume-slider-container">
             <span class="volume-icon" id="volumeIcon">🔊</span>
             <div class="volume-track" id="volumeTrack">
@@ -522,14 +512,13 @@
             </div>
         </div>
 
-        <!-- 显示当前光标位置预览/状态 -->
         <div class="cursor-hint" id="cursorHint">
             <i>📍</i> 点击文本选择开始处
         </div>
         <div class="status-msg" id="statusMsg">准备就绪</div>
     </div>
 
-    <!-- 中国电信广告 (保留原样) -->
+    <!-- 中国电信广告 -->
     <div class="telecom-ad fade-in" id="telecomAd">
         <div class="close-btn" id="closeAd">×</div>
         <a href="https://share20251108.haonetwork.cn/a?l=hx6oc2i0Jd3Id7_1295" target="_blank" class="telecom-content" style="text-decoration:none; display:flex; flex-direction:column; align-items:center;">
@@ -539,56 +528,52 @@
         </a>
     </div>
 
+    <!-- 自定义光标元素 -->
+    <div id="customCursor" class="custom-cursor" style="display: none;"></div>
+
     <script>
         (function() {
-            // ---------- 地藏经章节数据 (同原样，略作保留) ----------
+            // 地藏经章节数据 (精简版，可自行扩充)
             const chapters = [
                 { title: "卷上 · 忉利天宫神通品第一", content: `<h2>地藏菩萨本愿经</h2><h3>卷上</h3><h3>忉利天宫神通品第一</h3><p>如是我闻。一时佛在忉利天，为母说法。</p><p>尔时十方无量世界，不可说不可说一切诸佛，及大菩萨摩诃萨，皆来集会。赞叹释迦牟尼佛，能于五浊恶世，现不可思议大智慧神通之力，调伏刚强众生，知苦乐法，各遣侍者，问讯世尊。</p><p>是时，如来含笑，放百千万亿大光明云，所谓大圆满光明云、大慈悲光明云、大智慧光明云、大般若光明云、大三昧光明云、大吉祥光明云、大福德光明云、大功德光明云、大归依光明云、大赞叹光明云。放如是等不可说光明云已。</p><p>又出种种微妙之音，所谓檀波罗蜜音、尸波罗蜜音、羼提波罗密音、毗离耶波罗蜜音、禅波罗蜜音、般若波罗密音、慈悲音、喜舍音、解脱音、无漏音、智慧音、大智慧音、师子吼音、大师子吼音、云雷音、大云雷音。</p><p>出如是等不可说不可说音已，娑婆世界，及他方国土，有无量亿天龙鬼神，亦集到忉利天宫，所谓四天王天、忉利天、须焰摩天、兜率陀天、化乐天、他化自在天、梵众天、梵辅天、大梵天、少光天、无量光天、光音天、少净天、无量净天、遍净天、福生天、福爱天、广果天、无想天、无烦天、无热天、善见天、善现天、色究竟天、摩醯首罗天、乃至非想非非想处天，一切天众、龙众、鬼神等众，悉来集会。</p><p>复有他方国土，及娑婆世界，海神、江神、河神、树神、山神、地神、川泽神、苗稼神、昼神、夜神、空神、天神、饮食神、草木神，如是等神，皆来集会。</p><p>复有他方国土，及娑婆世界，诸大鬼王，所谓：恶目鬼王、啖血鬼王、啖精气鬼王、啖胎卵鬼王、行病鬼王、摄毒鬼王、慈心鬼王、福利鬼王、大爱敬鬼王，如是等鬼王，皆来集会。</p><p>尔时释迦牟尼佛、告文殊师利法王子菩萨摩诃萨：「汝观是一切诸佛菩萨及天龙鬼神，此世界、他世界，此国土、他国土，如是今来集会到忉利天者，汝知数不？」</p><p>文殊师利白佛言：「世尊，若以我神力，千劫测度，不能得知。」</p><p>佛告文殊师利：「吾以佛眼观故，犹不尽数。此皆是地藏菩萨久远劫来，已度、当度、未度，已成就、当成就、未成就。」</p><p>文殊师利白佛言：「世尊，我已过去久修善根、证无碍智。闻佛所言，即当信受。小果声闻、天龙八部、及未来世诸众生等，虽闻如来诚实之语，必怀疑惑。设使顶受，未免兴谤。唯愿世尊、广说地藏菩萨摩诃萨，因地作何行、立何愿，而能成就不思议事。」</p><p>佛告文殊师利：「譬如三千大千世界所有草木丛林、稻麻竹苇、山石微尘，一物一数，作一恒河；一恒河沙，一沙一界；一界之内、一尘一劫；一劫之内，所积尘数，尽充为劫，地藏菩萨证十地果位以来，千倍多于上喻。何况地藏菩萨在声闻、辟支佛地。」</p><p>文殊师利，此菩萨威神誓愿，不可思议。若未来世，有善男子、善女人，闻是菩萨名字，或赞叹、或瞻礼、或称名、或供养，乃至彩画刻镂塑漆形像，是人当得百返生于三十三天，永不堕恶道。」` },
                 { title: "卷上 · 分身集会品第二", content: `<h2>地藏菩萨本愿经</h2><h3>卷上</h3><h3>分身集会品第二</h3><p>尔时百千万亿不可思、不可议、不可量、不可说无量阿僧祇世界，所有地狱处，分身地藏菩萨，俱来集在忉利天宫。以如来神力故，各以方面，与诸得解脱从业道出者，亦各有千万亿那由他数，共持香华，来供养佛。</p><p>彼诸同来等辈，皆因地藏菩萨教化，永不退转于阿耨多罗三藐三菩提。是诸众等，久远劫来，流浪生死，六道受苦，暂无休息。以地藏菩萨广大慈悲，深誓愿故，各获果证。既至忉利，心怀踊跃，瞻仰如来，目不暂舍。</p><p>尔时，世尊舒金色臂，摩百千万亿不可思、不可议、不可量、不可说无量阿僧祇世界诸分身地藏菩萨摩诃萨顶，而作是言：「吾于五浊恶世，教化如是刚强众生，令心调伏，舍邪归正，十有一二，尚恶习在。吾亦分身千百亿，广设方便。或有利根，闻即信受；或有善果，勤劝成就；或有暗钝，久化方归；或有业重，不生敬仰。如是等辈众生，各各差别，分身度脱。」</p><p>「或现男子身、或现女人身、或现天龙身、或现神鬼身、或现山林川泽、河池泉井，利及于人，悉皆度脱。或现天帝身、或现梵王身、或现转轮王身、或现居士身、或现国王身、或现宰辅身、或现官属身、或现比丘、比丘尼、优婆塞、优婆夷身、乃至声闻、罗汉、辟支佛、菩萨等身、而以化度。非但佛身，独现其前。」</p><p>「汝观吾累劫勤苦，度脱如是等难化刚强罪苦众生。其有未调伏者，随业报应。若堕恶趣，受大苦时，汝当忆念吾在忉利天宫，殷勤付嘱。令娑婆世界，至弥勒出世已来众生，悉使解脱，永离诸苦，遇佛授记。」</p><p>尔时，诸世界分身地藏菩萨，共复一形，涕泪哀恋，白其佛言：「我从久远劫来，蒙佛接引，使获不可思议神力，具大智慧。我所分身，遍满百千万亿恒河沙世界，每一世界化百千万亿身，每一身度百千万亿人，令归敬三宝，永离生死，至涅槃乐。但于佛法中所为善事，一毛一渧，一沙一尘，或毫发许，我渐度脱，使获大利。唯愿世尊，不以后世恶业众生为虑。」</p><p>如是三白佛言：「唯愿世尊，不以后世恶业众生为虑。」</p><p>尔时，佛赞地藏菩萨言：「善哉！善哉！吾助汝喜。汝能成就久远劫来，发弘誓愿，广度将毕，即证菩提。」` },
                 { title: "卷上 · 观众生业缘品第三", content: `<h2>地藏菩萨本愿经</h2><h3>卷上</h3><h3>观众生业缘品第三</h3><p>尔时佛母摩耶夫人，恭敬合掌，问地藏菩萨言：「圣者，阎浮众生，造业差别，所受报应，其事云何？」</p><p>地藏答言：「千万世界，乃及国土，或有地狱、或无地狱；或有女人、或无女人；或有佛法、或无佛法，乃至声闻辟支佛，亦复如是，非但地狱罪报一等。」</p><p>摩耶夫人重白菩萨：「且愿闻于阎浮罪报所感恶趣。」</p><p>地藏答言：「圣母，唯愿听受，我粗说之。」</p><p>佛母白言：「愿圣者说。」</p><p>地藏言：「圣母，阎浮众生，举心动念，无非是罪。脱获善利，多退初心。若遇恶缘，念念增长。是等辈人，如履泥涂，负于重石，渐困渐重，足步深邃。若得遇知识，替与减负，或全与负。是知识有大力故，复相扶助，劝令牢脚。若达平地，须省恶路，无再经历。」</p><p>「圣母，阎浮众生，若能于诸善事，一毛一渧，一沙一尘，如是利益，悉皆自得。」</p><p>「复次，圣母，众生业感，差别不同，是故有诸地狱、饿鬼、畜生、修罗、人、天等道。」</p><p>「圣母，若遇杀生者，说宿殃短命报。」</p><p>「若遇窃盗者，说贫穷苦楚报。」</p><p>「若遇邪淫者，说雀鸽鸳鸯报。」</p><p>「若遇恶口者，说眷属斗诤报。」</p><p>「若遇两舌者，说无舌疮口报。」</p><p>「若遇绮语者，说矬陋喑哑报。」</p><p>「若遇贪欲者，说饿鬼报。」</p><p>「若遇嗔恚者，说丑陋癃残报。」</p><p>「若遇愚痴者，说畜生报。」</p><p>「若遇谤佛者，说盲聋喑哑报。」</p><p>「若遇谤法者，说所求违愿报。」</p><p>「若遇谤僧者，说生蛇虺中报。」</p><p>「若遇轻法慢教者，说永处恶道报。」</p><p>「若遇破用常住者，说亿劫轮回地狱报。」</p><p>「若遇污梵诬僧者，说永在畜生报。」</p><p>「若遇汤火斩斫伤生者，说轮回递偿报。」</p><p>「若遇破戒犯斋者，说禽兽饥饿报。」</p><p>「若遇非理毁用者，说所求阙绝报。」</p><p>「若遇吾我贡高者，说卑使下贱报。」</p><p>「若遇两舌斗乱者，说无舌百舌报。」</p><p>「若遇邪见者，说边地受生报。」</p><p>「如是等阎浮众生，身口意业，恶习结果，百千报应，今粗略说。如是等阎浮众生业感差别，地藏菩萨百千方便而教化之。是诸众生，先受如是等报，后堕地狱，动经劫数，无有出期。是故汝等，护念汝等，永离此道。」</p><p>尔时摩耶夫人，闻地藏菩萨所说恶业果报，甚大可畏，合掌顶礼，白言：「圣者，愿受我等优婆夷十戒，永为善道。闻地藏菩萨所言，益增深信。」</p><p>合掌而退。` }
-            ]; // 为简洁仅列三品，实际可扩充
+            ];
 
-            // ---------- 核心朗读与光标定位 ----------
             let currentChapterIndex = 0;
             const scriptureDiv = document.getElementById('scriptureContent');
             const chapterInfo = document.getElementById('chapterInfo');
             const prevBtn = document.getElementById('prevChapter');
             const nextBtn = document.getElementById('nextChapter');
+            const cursorEl = document.getElementById('customCursor');
 
-            // 加载章节
             function loadChapter(index) {
                 if (index < 0 || index >= chapters.length) return;
                 currentChapterIndex = index;
-                const chap = chapters[index];
-                scriptureDiv.innerHTML = chap.content;
-                chapterInfo.innerText = `当前章节：${chap.title}`;
+                scriptureDiv.innerHTML = chapters[index].content;
+                chapterInfo.innerText = `当前章节：${chapters[index].title}`;
                 prevBtn.disabled = (index === 0);
                 nextBtn.disabled = (index === chapters.length-1);
-                // 重置播放器状态
                 resetReader();
+                cursorEl.style.display = 'none'; // 隐藏光标
             }
 
             prevBtn.addEventListener('click', ()=> loadChapter(currentChapterIndex-1));
             nextBtn.addEventListener('click', ()=> loadChapter(currentChapterIndex+1));
-            loadChapter(0); // 初始
+            loadChapter(0);
 
-            // ---------- 朗读引擎：SpeechSynthesis ----------
+            // ---------- 朗读引擎 ----------
             const synth = window.speechSynthesis;
             let utterance = null;
-            let isSpeaking = false;
-            let isPaused = false;
-            let currentSentence = "";          // 当前正在读的句子
-            let currentCharPos = 0;             // 在全文中的字符偏移(粗略)
-            let fullText = "";                  // 当前可视全文(仅文字)
+            let isSpeaking = false, isPaused = false;
+            let currentSentence = "", currentCharPos = 0;
+            let fullText = "";
 
-            // 获取纯净文本 (去掉html标签，只留文字)
             function getCleanText() {
-                const cloneDiv = scriptureDiv.cloneNode(true);
-                // 移除脚本？无。但保留文本
-                return (cloneDiv.innerText || cloneDiv.textContent).replace(/\s+/g, ' ').trim();
+                const clone = scriptureDiv.cloneNode(true);
+                return (clone.innerText || clone.textContent).replace(/\s+/g, ' ').trim();
             }
 
-            // 重置朗读状态
             function resetReader() {
                 if (synth.speaking) synth.cancel();
                 utterance = null;
@@ -596,92 +581,59 @@
                 updatePlayButton();
                 document.getElementById('cursorHint').innerHTML = `<i>📍</i> 点击文本选择开始处`;
                 document.getElementById('statusMsg').innerText = '停止';
-                document.getElementById('progressFill').style.width = '0%';
-                document.getElementById('currentTime').innerText = '00:00';
-                fullText = getCleanText();  // 更新全文
+                fullText = getCleanText();
             }
 
-            // 根据字符偏移找到句子 (简单按句号、感叹号等分割)
             function findSentenceAtOffset(offset) {
                 if (!fullText) fullText = getCleanText();
                 if (offset >= fullText.length) offset = fullText.length-1;
-                // 向前寻找句子开头 (。！？；等)
                 let start = 0;
                 for (let i = offset; i >= 0; i--) {
                     if (i===0) { start=0; break; }
                     const ch = fullText[i];
                     if (ch === '。' || ch === '！' || ch === '？' || ch === '；' || ch === '\n') {
-                        start = i+1;
-                        break;
+                        start = i+1; break;
                     }
                 }
                 let end = fullText.length;
                 for (let i = start; i < fullText.length; i++) {
                     const ch = fullText[i];
                     if (ch === '。' || ch === '！' || ch === '？' || ch === '；' || ch === '\n') {
-                        end = i+1; // 包含标点
-                        break;
+                        end = i+1; break;
                     }
                 }
                 return { sentence: fullText.substring(start, end), startIdx: start, endIdx: end };
             }
 
-            // 从指定字符开始朗读
             function speakFromOffset(offset) {
                 if (!fullText) fullText = getCleanText();
                 if (fullText.length === 0) return;
                 if (offset < 0) offset = 0;
                 if (offset >= fullText.length) offset = fullText.length-1;
-                
                 const { sentence, startIdx, endIdx } = findSentenceAtOffset(offset);
                 if (!sentence.trim()) return;
                 currentSentence = sentence;
-                currentCharPos = startIdx; // 记录起始
+                currentCharPos = startIdx;
 
                 if (synth.speaking) synth.cancel();
-
                 utterance = new SpeechSynthesisUtterance(sentence);
                 utterance.lang = 'zh-CN';
                 utterance.rate = 0.9;
-                utterance.onstart = () => {
-                    isSpeaking = true; isPaused = false;
-                    updatePlayButton();
-                    document.getElementById('statusMsg').innerText = '朗读中...';
-                };
-                utterance.onend = () => {
-                    // 读完一句，自动尝试下一句 (可选)
-                    isSpeaking = false; isPaused = false;
-                    updatePlayButton();
-                    document.getElementById('statusMsg').innerText = '句末暂停';
-                };
-                utterance.onerror = () => {
-                    isSpeaking = false; updatePlayButton();
-                };
+                utterance.onstart = () => { isSpeaking = true; isPaused = false; updatePlayButton(); document.getElementById('statusMsg').innerText = '朗读中...'; };
+                utterance.onend = () => { isSpeaking = false; updatePlayButton(); document.getElementById('statusMsg').innerText = '句末暂停'; };
+                utterance.onerror = () => { isSpeaking = false; updatePlayButton(); };
                 utterance.onpause = () => { isPaused = true; updatePlayButton(); };
                 utterance.onresume = () => { isPaused = false; updatePlayButton(); };
-                // 进度演示：简单按时间模拟，无法获取准确位置，只更新显示
-                utterance.onboundary = (e) => { /* 可忽略 */ };
-
                 synth.speak(utterance);
-                document.getElementById('cursorHint').innerHTML = `<i>📍</i> 从 "${sentence.substring(0,15)}..." 开始`;
+                document.getElementById('cursorHint').innerHTML = `<i>📍</i> 从 "${sentence.substring(0,18)}..." 开始`;
             }
 
-            // 播放/暂停切换
             function togglePlay() {
                 if (synth.speaking && isSpeaking) {
-                    if (isPaused) {
-                        synth.resume();
-                    } else {
-                        synth.pause();
-                    }
+                    if (isPaused) synth.resume();
+                    else synth.pause();
                 } else {
-                    // 没有在朗读，尝试从上次位置或光标位置开始
-                    if (lastClickOffset !== undefined && fullText) {
-                        speakFromOffset(lastClickOffset);
-                    } else {
-                        // 默认从头
-                        speakFromOffset(0);
-                    }
+                    speakFromOffset(lastClickOffset !== undefined ? lastClickOffset : 0);
                 }
                 updatePlayButton();
             }
@@ -717,42 +669,72 @@
                 }
             }
 
-            // ---------- 监听文本区域的点击 (获取光标位置) ----------
+            // ---------- 光标定位 + 视觉光标 ----------
             let lastClickOffset = 0;
+
+            function updateCustomCursor(x, y, charWidth = 12) {
+                cursorEl.style.left = (x - 2) + 'px';
+                cursorEl.style.top = (y - 4) + 'px';
+                cursorEl.style.display = 'block';
+            }
+
             scriptureDiv.addEventListener('mouseup', function(e) {
                 const selection = window.getSelection();
                 if (!selection.rangeCount) return;
                 const range = selection.getRangeAt(0);
-                // 获取点击处文本内容
-                const clickedText = range.toString();
-                if (!clickedText) return;
+                if (range.collapsed) { // 确保是光标点击，而不是选中文字
+                    const rect = range.getBoundingClientRect();
+                    if (rect.width === 0 && rect.height > 0) {
+                        // 这是光标位置
+                        updateCustomCursor(rect.left, rect.top);
+                    } else {
+                        // 降级：用点击坐标
+                        updateCustomCursor(e.clientX, e.clientY);
+                    }
 
-                // 计算全文中的偏移: 复杂，我们用简单方案：获取光标前的文本长度
-                const preCaretRange = range.cloneRange();
-                preCaretRange.selectNodeContents(scriptureDiv);
-                preCaretRange.setEnd(range.endContainer, range.endOffset);
-                const rawOffset = preCaretRange.toString().length;  // 包括html换行影响, 但innerText能近似
+                    // 计算偏移量
+                    const preCaretRange = range.cloneRange();
+                    preCaretRange.selectNodeContents(scriptureDiv);
+                    preCaretRange.setEnd(range.endContainer, range.endOffset);
+                    const rawOffset = preCaretRange.toString().length;
+                    const pureFull = getCleanText();
+                    lastClickOffset = Math.min(rawOffset, pureFull.length-1);
 
-                // 重新获取纯净全文偏移
-                const pureFull = getCleanText();
-                // 粗略对应 (innerText会合并空格，但大致可用)
-                lastClickOffset = Math.min(rawOffset, pureFull.length-1);
-                
-                // 预览句子
-                const { sentence } = findSentenceAtOffset(lastClickOffset);
-                if (sentence) {
+                    const { sentence } = findSentenceAtOffset(lastClickOffset);
                     document.getElementById('cursorHint').innerHTML = `<i>📍</i> "${sentence.substring(0,18)}…"`;
+                    if (!synth.speaking) {
+                        document.getElementById('statusMsg').innerText = '已选位置，点击播放';
+                    }
                 } else {
-                    document.getElementById('cursorHint').innerHTML = `<i>📍</i> 位置已记录`;
-                }
-
-                // 如果当前没有在朗读，更新状态
-                if (!synth.speaking) {
-                    document.getElementById('statusMsg').innerText = '已选位置，点击播放';
+                    // 如果选中了一段文字，也可以记录开始位置
+                    const firstRange = selection.getRangeAt(0);
+                    const preRange = firstRange.cloneRange();
+                    preRange.selectNodeContents(scriptureDiv);
+                    preRange.setEnd(firstRange.startContainer, firstRange.startOffset);
+                    const rawOffset = preRange.toString().length;
+                    lastClickOffset = Math.min(rawOffset, getCleanText().length-1);
+                    // 但视觉光标只显示在开始位置
+                    const rect = firstRange.getBoundingClientRect();
+                    updateCustomCursor(rect.left, rect.top);
                 }
             });
 
-            // ---------- 绑定播放器按钮 ----------
+            // 点击空白区域隐藏光标？不需要，点击文本才显示
+            scriptureDiv.addEventListener('click', function(e) {
+                // 确保光标显示
+                if (cursorEl.style.display === 'none') {
+                    cursorEl.style.display = 'block';
+                }
+            });
+
+            // 切换章节时隐藏光标
+            scriptureDiv.addEventListener('scroll', function() {
+                // 滚动时稍微调整光标位置，简单处理：隐藏后重新计算？这里暂不复杂处理，保持隐藏或重新计算
+                // 为了不干扰，滚动时暂时隐藏，下次点击再出现
+                cursorEl.style.display = 'none';
+            });
+
+            // 播放器按钮绑定
             document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
             document.getElementById('stopBtn').addEventListener('click', stopReading);
             document.getElementById('nextSentenceBtn').addEventListener('click', nextSentence);
@@ -767,12 +749,10 @@
                 let vol = (e.clientX - rect.left) / rect.width;
                 vol = Math.min(1, Math.max(0, vol));
                 if (utterance) utterance.volume = vol;
-                else if (synth) { /* 全局音量无法直接设置，但可以后续 */ }
                 volumeFill.style.width = vol*100 + '%';
                 volumeIcon.innerText = vol === 0 ? '🔇' : (vol < 0.5 ? '🔈' : '🔊');
             });
 
-            // 进度条点击简单快进 (按比例跳转文本)
             document.getElementById('progressArea').addEventListener('click', (e) => {
                 if (!fullText) fullText = getCleanText();
                 const rect = e.currentTarget.getBoundingClientRect();
@@ -782,7 +762,7 @@
                 speakFromOffset(targetOffset);
             });
 
-            // 计数器（保留原样）
+            // 计数器
             (function initCounter() {
                 const el = document.getElementById('globalVisitCount');
                 let c = localStorage.getItem('dzVisit') || 2864;
@@ -796,6 +776,9 @@
                 e.stopPropagation();
                 document.getElementById('telecomAd').style.display='none';
             });
+
+            // 初始化全文
+            fullText = getCleanText();
         })();
     </script>
 </body>
