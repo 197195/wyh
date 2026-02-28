@@ -578,17 +578,10 @@
                 utterance.volume = 1;
 
                 const voices = window.speechSynthesis.getVoices();
-                cconst preferredVoice = voices.find(voice => voice.lang.includes('zh') && voice.name.includes('Google') && voice.name.includes('Female')) 
-                    || voices.find(voice => voice.lang.includes('zh') && voice.name.includes('Microsoft') && voice.name.includes('Male'))
-                    || voices.find(voice => voice.lang.includes('zh')) 
-                    || voices[0];
-
-// 可以改为固定使用某种声音，例如：
-// 列出所有中文声音供选择
-console.log(voices.filter(v => v.lang.includes('zh')).map(v => v.name));
-// 然后指定一个你喜欢的
-const preferredVoice = voices.find(voice => voice.name.includes('Microsoft Kangkang')) // 示例
-                    || voices.find(voice => voice.lang.includes('zh'));
+                const preferredVoice = voices.find(voice => voice.lang.includes('zh') && voice.name.includes('Google') && voice.name.includes('Female')) 
+                                    || voices.find(voice => voice.lang.includes('zh') && voice.name.includes('Microsoft') && voice.name.includes('Male'))
+                                    || voices.find(voice => voice.lang.includes('zh')) 
+                                    || voices[0];
                 if (preferredVoice) utterance.voice = preferredVoice;
 
                 // 预估剩余时长
