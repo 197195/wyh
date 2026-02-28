@@ -573,15 +573,15 @@
                 
                 utterance = new SpeechSynthesisUtterance(textToSpeak);
                 utterance.lang = 'zh-CN';
-                utterance.rate = 0.88;      
-                utterance.pitch = 0.85;      
+                utterance.rate = 0.75;      // 更慢的语速，更庄严
+                utterance.pitch = 0.6;      // 更低的音调，更沉稳    
                 utterance.volume = 1;
 
-                const voices = window.speechSynthesis.getVoices();
-                const preferredVoice = voices.find(voice => voice.lang.includes('zh') && voice.name.includes('Google') && voice.name.includes('Female')) 
-                                    || voices.find(voice => voice.lang.includes('zh') && voice.name.includes('Microsoft') && voice.name.includes('Male'))
-                                    || voices.find(voice => voice.lang.includes('zh')) 
-                                    || voices[0];
+                const preferredVoice = voices.find(voice => voice.lang.includes('zh') && voice.name.includes('Microsoft') && voice.name.includes('Male')) 
+                    || voices.find(voice => voice.lang.includes('zh') && voice.name.includes('Google') && voice.name.includes('Male'))
+                    || voices.find(voice => voice.lang.includes('zh') && voice.name.toLowerCase().includes('male'))
+                    || voices.find(voice => voice.lang.includes('zh')) 
+                    || voices[0];
                 if (preferredVoice) utterance.voice = preferredVoice;
 
                 // 预估剩余时长
